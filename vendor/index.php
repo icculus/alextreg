@@ -69,7 +69,6 @@ function op_addtoken()
     else   // put out a confirmation...
     {
         $htmlextid= htmlentities($extid, ENT_QUOTES);
-        $htmlname = htmlentities($tokname, ENT_QUOTES);
         $htmltokname = htmlentities($tokname, ENT_QUOTES);
         $htmltokval = htmlentities($tokval, ENT_QUOTES);
 
@@ -81,7 +80,6 @@ function op_addtoken()
         echo "with value ${htmltokval}${hex}.<br>\n";
         echo "...if you're sure, click 'Confirm'...<br>\n";
         echo "<form>\n";
-        echo "<input type='hidden' name='tokname' value='$htmlname'>\n";
         echo "<input type='hidden' name='operation' value='op_addtoken'>\n";
         echo "<input type='hidden' name='tokname' value='$htmltokname'>\n";
         echo "<input type='hidden' name='tokval' value='$htmltokval'>\n";
@@ -94,7 +92,7 @@ function op_addtoken()
 
 
 $operations['op_addentrypoint'] = 'op_addentrypoint';
-function op_addentrypoint()
+function op_addtoken()
 {
     if (!is_authorized_vendor())
     {
@@ -102,8 +100,8 @@ function op_addentrypoint()
         return;
     } // if
 
-    $wantname = $_REQUEST['wantname'];
-    if (empty($wantname))
+    $entname = $_REQUEST['entrypointname'];
+    if (empty($entname))
     {
         write_error('No entry point name specified.');
         return;
@@ -117,16 +115,16 @@ function op_addentrypoint()
     } // if
 
     // see if it's already in the database...
-    $sqlwantname = db_escape_string($wantname);
-    $sql = "select id from alextreg_entrypoints where entrypointname='$sqlwantname'";
+    $sqlentname = db_escape_string($tokname);
+    $sql = "select id from alextreg_entrypoints where entrypointname='$sqlentname'";
     $query = do_dbquery($sql);
     if ($query == false)
         return;  // error output is handled in database.php ...
 
     if (db_num_rows($query) > 0)
     {
-        write_error('This token name is in use. Below is what a search turned up.');
-        render_token_list($wantname, $query);
+        write_error('This entry point is in use. Below is what a search turned up.');
+        render_entrypoint_list($tokname, $query);
         db_free_result($query);
         return;
     } // if
@@ -138,27 +136,31 @@ function op_addentrypoint()
     if ((!empty($cookie)) and ($cookie == $_SERVER['REMOTE_ADDR']))
     {
         $sqlauthor = db_escape_string($_SERVER['REMOTE_USER']);
+        $sqlextid = db_escape_string($extid);
         // ok, add it to the database.
-        $sql = "insert into alextreg_entrypoints" .  // !!! FIXME: Should have author associated with it!
-               " (entrypointname, extid, author, entrydate, lastedit)" .
-               " values ('$sqlwantname', $extid, '$sqlauthor', NOW(), NOW())";
+        $sql = "insert into alextreg_entrypoints" .
+               " (tokenname, tokenval, extid, author, entrydate, lastedit)" .
+               " values ('$sqlentname', $sqlextid, '$sqlauthor', NOW(), NOW())";
         if (do_dbinsert($sql) == 1)
             echo "<font color='#00FF00'>Entry point added.</font><br>\n";
     } // if
     else   // put out a confirmation...
     {
-        $htmlname = htmlentities($wantname, ENT_QUOTES);
-        echo "About to add an extension named $htmlname.<br>\n";
+        $htmlextid= htmlentities($extid, ENT_QUOTES);
+        $htmlentname = htmlentities($entname, ENT_QUOTES);
+
+        echo "About to add an entry point named $htmlname,<br>\n";
+        echo "with value ${htmltokval}${hex}.<br>\n";
         echo "...if you're sure, click 'Confirm'...<br>\n";
         echo "<form>\n";
-        echo "<input type='hidden' name='wantname' value='$htmlname'>\n";
-        echo "<input type='hidden' name='operation' value='op_addextension'>\n";
+        echo "<input type='hidden' name='operation' value='op_addentrypoint'>\n";
+        echo "<input type='hidden' name='entname' value='$htmlentname'>\n";
+        echo "<input type='hidden' name='extid' value='$htmlextid'>\n";
         echo "<input type='hidden' name='iamsure' value='${_SERVER['REMOTE_ADDR']}'>\n";
         echo "<input type='submit' name='form_submit' value='Confirm'>\n";
         echo "</form>\n";
     } // else
-} // op_addtoken
-
+} // op_addentrypoint
 
 
 $operations['op_addextension'] = 'op_addextension';

@@ -40,6 +40,23 @@ function render_token_list($wantname, $query)
 } // render_token_list
 
 
+function render_entrypoint_list($wantname, $query)
+{
+    $count = db_num_rows($query);
+    if (($wantname) and ($count > 1))
+        write_error('(Unexpected number of results from database!)');
+
+    print("<ul>\n");
+    while ( ($row = db_fetch_array($query)) != false )
+    {
+        $url = get_alext_url($row['extname']);
+        print("  <li>${row['entrypointname']} ");
+        print(" from <a href='$url'>${row['extname']}</a>\n");
+    } // while
+    print("</ul>\n<p>Total results: $count\n");
+} // render_entrypoint_list
+
+
 $queryfuncs['extension'] = 'find_extension';
 function find_extension($wantname)
 {
@@ -138,20 +155,7 @@ function find_entrypoint($wantname)
     if ($query == false)
         return;  // error output is handled in database.php ...
     else
-    {
-        $count = db_num_rows($query);
-        if (($wantname) and ($count > 1))
-            write_error('(Unexpected number of results from database!)');
-
-        print("<ul>\n");
-        while ( ($row = db_fetch_array($query)) != false )
-        {
-            $url = get_alext_url($row['extname']);
-            print("  <li>${row['entrypointname']} ");
-            print(" from <a href='$url'>${row['extname']}</a>\n");
-        } // while
-        print("</ul>\n<p>Total results: $count\n");
-    } // else
+        render_entrypoint_list($query);
 
     db_free_result($query);
 } // find_entrypoint
@@ -273,7 +277,7 @@ function show_one_extension($extrow)
     if (is_authorized_vendor())
     {
         echo "  <li>\n<form>\n";
-        echo "Add a new entry point named <input type='text' name='wantname'>\n";
+        echo "Add a new entry point named <input type='text' name='entname'>\n";
         echo "<input type='hidden' name='extid' value='$extid'>\n";
         echo "<input type='hidden' name='operation' value='op_addentrypoint'>\n";
         echo "<input type='submit' name='form_submit' value='Go!'>\n";
