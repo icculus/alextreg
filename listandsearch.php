@@ -162,6 +162,8 @@ function do_find($wanttype, $wantname = NULL)
     } // if
 
     $queryfunc($wantname);
+
+    echo "\n<hr>\n";
 } // do_find
 
 
