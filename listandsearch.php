@@ -214,7 +214,7 @@ function show_one_extension($extrow)
             echo " last modified ${row['lastedit']}\n";
         } // while
     } // else
-    db_free_results($query);
+    db_free_result($query);
     echo "</ul>\n";
 
     echo "<p>Entry points:\n<ul>\n";
@@ -236,7 +236,7 @@ function show_one_extension($extrow)
             echo " last modified ${row['lastedit']}\n";
         } // while
     } // else
-    db_free_results($query);
+    db_free_result($query);
     echo "</ul>\n";
 
     echo "<hr>\n";
