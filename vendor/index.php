@@ -420,7 +420,7 @@ function op_renameext()
                " lastedit=NOW(), lasteditauthor='$sqlauthor' where id=$extid";
         if (do_dbupdate($sql) == 1)
         {
-            update_papertrail("Extension '$entname' renamed to '$newval'", $sql, NULL);
+            update_papertrail("Extension '$extname' renamed to '$newval'", $sql, NULL);
             do_showext($newval);
         } // if
     } // if
