@@ -1,5 +1,22 @@
 <?php
 
+require_once 'operations.php';
+
+$operations['op_findone'] = 'op_findone';
+function op_findone()
+{
+    echo "called op_findone()<br>\n";
+}
+
+
+$operations['op_findall'] = 'op_findall';
+function op_findall()
+{
+    echo "called op_findall()<br>\n";
+}
+
+
+
 function render_search_ui()
 {
     print <<<EOF
