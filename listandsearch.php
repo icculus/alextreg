@@ -7,10 +7,26 @@ require_once 'common.php';
 $queryfuncs = array();
 
 
+function render_extension_list($wantname, $query)
+{
+    $count = db_num_rows($query);
+    if (($wantname) and ($count > 1))
+        write_error('(Unexpected number of results from database!)');
+
+    print("<ul>\n");
+    while ( ($row = db_fetch_array($query)) != false )
+    {
+        $url = get_alext_url($row['extname']);
+        print("  <li><a href='$url'>${row['extname']}</a>\n");
+    } // while
+    print("</ul>\n<p>Total results: $count\n");
+} // render_extension_list
+
+
 $queryfuncs['extension'] = 'find_extension';
 function find_extension($wantname)
 {
-    $sql = 'select extname, id from alextreg_extensions';
+    $sql = 'select extname from alextreg_extensions';
 
     if ($wantname)
     {
@@ -22,19 +38,7 @@ function find_extension($wantname)
     if ($query == false)
         return;  // error output is handled in database.php ...
     else
-    {
-        $count = db_num_rows($query);
-        if (($wantname) and ($count > 1))
-            write_error('(Unexpected number of results from database!)');
-
-        print("<ul>\n");
-        while ( ($row = db_fetch_array($query)) != false )
-        {
-            $url = get_alext_wiki_url($row['id']);
-            print("  <li><a href='$url'>${row['extname']}</a>\n");
-        } // while
-        print("</ul>\n<p>Total results: $count\n");
-    } // else
+        render_extension_list($wantname, $query);
 
     db_free_result($query);
 } // find_extension
@@ -62,7 +66,7 @@ function find_token($additionalsql, $wantname)
         print("<ul>\n");
         while ( ($row = db_fetch_array($query)) != false )
         {
-            $url = get_alext_wiki_url($row['extname']);
+            $url = get_alext_url($row['extname']);
             $hex = sprintf("0x%X", $row['tokenval']);  // !!! FIXME: faster way to do this?
             print("  <li>${row['tokenname']} ($hex)");
             print(" from <a href='$url'>${row['extname']}</a>\n");
@@ -129,7 +133,7 @@ function find_entrypoint($wantname)
         print("<ul>\n");
         while ( ($row = db_fetch_array($query)) != false )
         {
-            $url = get_alext_wiki_url($row['extname']);
+            $url = get_alext_url($row['extname']);
             print("  <li>${row['entrypointname']} ");
             print(" from <a href='$url'>${row['extname']}</a>\n");
         } // while
@@ -184,6 +188,61 @@ function op_findone()
 } // op_findone
 
 
+function show_one_extension($extrow)
+{
+    $extname = $extrow['extname'];
+    $extid = $extrow['id'];
+    $wikiurl = get_alext_wiki_url($extname);
+    echo "<p>$extname (<a href='${wikiurl}'>docs</a>)\n";
+    echo "<p>Tokens:\n<ul>\n";
+
+    $sql = 'select * from alextreg_tokens as tok' .
+           ' left outer join alextreg_extensions as ext' .
+           ' on tok.extid=ext.id';
+    $query = do_dbquery($sql);
+    if ($query == false)
+        return;  // uh...?
+    else if ($query == 0)
+        echo "  <li> (no new tokens.)\n";
+    else
+    {
+        while ( ($row = db_fetch_array($query)) != false )
+        {
+            $hex = sprintf("0x%X", $row['tokenval']);  // !!! FIXME: faster way to do this?
+            echo "  <li> ${row['tokenname']} ($hex):";
+            echo " added ${row['entrydate']},";
+            echo " last modified ${row['lastedit']}\n";
+        } // while
+    } // else
+    db_free_results($query);
+    echo "</ul>\n";
+
+    echo "<p>Entry points:\n<ul>\n";
+    $sql = 'select * from alextreg_entrypoints as ent' .
+           ' left outer join alextreg_extensions as ext' .
+           ' on ent.extid=ext.id';
+
+    $query = do_dbquery($sql);
+    if ($query == false)
+        return;  // uh...?
+    else if ($query == 0)
+        echo "  <li> (no new entry points.)\n";
+    else
+    {
+        while ( ($row = db_fetch_array($query)) != false )
+        {
+            echo "  <li> ${row['entrypointname']}:";
+            echo " added ${row['entrydate']},";
+            echo " last modified ${row['lastedit']}\n";
+        } // while
+    } // else
+    db_free_results($query);
+    echo "</ul>\n";
+
+    echo "<hr>\n";
+} // show_one_extension
+
+
 $operations['op_findall'] = 'op_findall';
 function op_findall()
 {
@@ -192,6 +251,35 @@ function op_findall()
     do_find($wanttype);
 } // op_findall
 
+
+$operations['op_showext'] = 'op_showext';
+function op_showext()
+{
+    $extname = $_REQUEST['extname'];
+    if (empty($extname))
+    {
+        write_error('No extension specified.');
+        return;
+    } // if
+
+    $sqlwantname = db_escape_string($wantname);
+    $sql = "select * from alextreg_extensions" .
+           " where extname='$sqlwantname'";
+
+    $query = do_dbquery($sql);
+    if ($query == false)
+        return;  // error output is handled in database.php ...
+    else if (db_num_rows($query) == 0)
+        write_error('No such extension.');
+    else
+    {
+        // just in case there's more than one for some reason...
+        while ( ($row = db_fetch_array($query)) != false )
+            show_one_extension($row);
+    } // else
+
+    db_free_result($query);
+} // op_showext
 
 
 function render_search_ui()

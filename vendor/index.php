@@ -9,7 +9,29 @@ require_once '../listandsearch.php';
 $operations['op_addextension'] = 'op_addextension';
 function op_addextension()
 {
-    write_error("Not implemented.");
+    $wantname = $_REQUEST['wantname'];
+    if (empty($wantname))
+    {
+        write_error('No extension name specified.');
+        return;
+    } // if
+
+    // see if it's already in the database...
+    $sqlwantname = db_escape_string($wantname);
+    $sql = "select id from alextreg_extensions where extname='$wantname'";
+    $query = do_dbquery($sql);
+    if ($query == false)
+        return;  // error output is handled in database.php ...
+
+    if (db_num_rows($query) > 0)
+    {
+        write_error('This extension name is in use. Below is what a search turned up.');
+        render_extension_list($wantname, $query);
+        return;
+    } // if
+
+    db_free_result($query);
+
 } // op_addextension
 
 
