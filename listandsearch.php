@@ -262,9 +262,9 @@ function show_one_extension($extrow)
 
     echo "<p>Tokens:\n<ul>\n";
 
-    $sql = 'select * from alextreg_tokens where (extid=$extid)';
+    $sql = "select * from alextreg_tokens where (extid=$extid)";
     if (!$is_vendor)
-        $sql .= " and (ext.public=1)";
+        $sql .= ' and (ext.public=1)';
 
     $query = do_dbquery($sql);
     if ($query == false)
@@ -287,9 +287,9 @@ function show_one_extension($extrow)
     echo "</ul>\n";
 
     echo "<p>Entry points:\n<ul>\n";
-    $sql = 'select * from alextreg_entrypoints where (extid=$extid)';
+    $sql = "select * from alextreg_entrypoints where (extid=$extid)";
     if (!$is_vendor)
-        $sql .= " and (ext.public=1)";
+        $sql .= ' and (ext.public=1)';
 
     $query = do_dbquery($sql);
     if ($query == false)
