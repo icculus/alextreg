@@ -408,7 +408,9 @@ function op_renameent()
 
     // see if it's already in the database...
     $sqlnewval = db_escape_string($newval);
-    $sql = 'select * from alextreg_entrypoints' .
+    $sql = 'select ent.*, ext.extname from alextreg_entrypoints as ent' .
+           ' left outer join alextreg_extensions as ext' .
+           ' on ent.extid=ext.id' .
            " where (entrypointname='$sqlnewval')";
     $query = do_dbquery($sql);
     if ($query == false)
@@ -472,7 +474,9 @@ function op_renametok()
 
     // see if it's already in the database...
     $sqlnewval = db_escape_string($newval);
-    $sql = 'select * from alextreg_tokens' .
+    $sql = 'select tok.*, ext.extname from alextreg_tokens as tok' .
+           ' left outer join alextreg_extensions as ext' .
+           ' on tok.extid=ext.id' .
            " where (tokenname='$sqlnewval')";
     $query = do_dbquery($sql);
     if ($query == false)
@@ -536,7 +540,10 @@ function op_revaluetok()
 
     // see if it's already in the database...
     $sqlnewval = db_escape_string($newval);
-    $sql = "select * from alextreg_tokens where (tokenval=$newval)";
+    $sql = 'select tok.*, ext.extname from alextreg_tokens as tok' .
+           ' left outer join alextreg_extensions as ext' .
+           ' on tok.extid=ext.id' .
+           " where (tokenval=$newval)";
     $query = do_dbquery($sql);
     if ($query == false)
         return;  // error output is handled in database.php ...
