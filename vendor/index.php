@@ -45,7 +45,7 @@ function op_addtoken()
     // see if it's already in the database...
     $sqltokname = db_escape_string($tokname);
     $sqltokval = db_escape_string($tokval);
-    $sql = "select id from alextreg_tokens where (tokenname='$sqltokname') or (tokenval=$sqltokval)";
+    $sql = "select * from alextreg_tokens where (tokenname='$sqltokname') or (tokenval=$sqltokval)";
     $query = do_dbquery($sql);
     if ($query == false)
         return;  // error output is handled in database.php ...
@@ -137,7 +137,7 @@ function op_addentrypoint()
 
     // see if it's already in the database...
     $sqlentname = db_escape_string($entname);
-    $sql = "select id from alextreg_entrypoints where entrypointname='$sqlentname'";
+    $sql = "select * from alextreg_entrypoints where entrypointname='$sqlentname'";
     $query = do_dbquery($sql);
     if ($query == false)
         return;  // error output is handled in database.php ...
@@ -206,7 +206,7 @@ function op_addextension()
 
     // see if it's already in the database...
     $sqlwantname = db_escape_string($wantname);
-    $sql = "select id from alextreg_extensions where extname='$sqlwantname'";
+    $sql = "select * from alextreg_extensions where extname='$sqlwantname'";
     $query = do_dbquery($sql);
     if ($query == false)
         return;  // error output is handled in database.php ...
