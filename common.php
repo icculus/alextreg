@@ -121,6 +121,8 @@ function get_input_number($reqname, $reqtype, &$reqval)
         write_error("$reqtype isn't a number");
         return false;
     } // if
+
+    return true;
 } // get_input_number
 
 
