@@ -225,7 +225,7 @@ function show_one_extension($extrow)
 
     if ($is_vendor)
     {
-        $toggle = (($public) ? 0 : 1);
+        $toggle = (($public) ? 'n' : 'y');
         $is = ($public) ? 'is' : 'is not';
         echo "<p><form>\n";
         echo "<b>Vendor:</b>\n";

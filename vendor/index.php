@@ -268,6 +268,7 @@ function op_showhideext()
         write_error('No toggle value specified.');
         return;
     } // if
+    $newval = ($newval == 'y');
 
     $extid = $_REQUEST['extid'];
     if (empty($extid))
