@@ -266,12 +266,14 @@ function show_one_extension($extrow)
 
     if ($is_vendor)
     {
+        $form = get_form_tag();
+
         echo "<p>\n";
         echo "<table border='1'><tr><td><b>Vendor:</b></td></tr><tr><td>\n";
 
         $toggle = (($public) ? 'n' : 'y');
         $is = ($public) ? 'is' : 'is not';
-        echo "<form>\n";
+        echo "$form\n";
         echo "This extension $is publically visible.\n";
         echo "<input type='hidden' name='extid' value='$extid'>\n";
         echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
@@ -280,7 +282,7 @@ function show_one_extension($extrow)
         echo "<input type='submit' name='form_submit' value='Toggle'>\n";
         echo "</form>\n";
 
-        echo "<form>\n";
+        echo "$form\n";
         echo "Add a new token named <input type='text' name='tokname'>\n";
         echo "with the value <input type='text' name='tokval'>.\n";
         echo "<input type='hidden' name='extid' value='$extid'>\n";
@@ -289,7 +291,7 @@ function show_one_extension($extrow)
         echo "<input type='submit' name='form_submit' value='Go!'>\n";
         echo "</form>\n";
 
-        echo "<form>\n";
+        echo "$form\n";
         echo "Add a new entry point named <input type='text' name='entrypointname'>\n";
         echo "<input type='hidden' name='extid' value='$extid'>\n";
         echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
@@ -297,7 +299,7 @@ function show_one_extension($extrow)
         echo "<input type='submit' name='form_submit' value='Go!'>\n";
         echo "</form>\n";
 
-        echo "<form>\n";
+        echo "$form\n";
         echo "I'd like to rename this extension to\n";
         echo "<input type='text' name='newval' value=''>.\n";
         echo "<input type='hidden' name='extid' value='$extid'>\n";
@@ -306,7 +308,7 @@ function show_one_extension($extrow)
         echo "<input type='submit' name='form_submit' value='Go!'>\n";
         echo "</form>\n";
 
-        echo "<form>\n";
+        echo "$form\n";
         echo "I'd like to delete this extension.\n";
         echo "<input type='hidden' name='extid' value='$extid'>\n";
         echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
@@ -316,7 +318,7 @@ function show_one_extension($extrow)
 
         if (count($tokens))
         {
-            echo "<form>\n";
+            echo "$form\n";
             echo "I want to change the\n";
             echo "<select name='operation' size='1'>\n";
             echo "  <option value='op_renametok'>name</option>\n";
@@ -337,7 +339,7 @@ function show_one_extension($extrow)
             echo "<input type='submit' name='form_submit' value='Go!'>\n";
             echo "</form>\n";
 
-            echo "<form>\n";
+            echo "$form\n";
             echo "I want to delete the token named\n";
             echo "<select name='tokname' size='1'>\n";
             echo "  <option value=''>...</option>\n";
@@ -356,7 +358,7 @@ function show_one_extension($extrow)
 
         if (count($entrypoints))
         {
-            echo "<form>\n";
+            echo "$form\n";
             echo "I want to change the name of the entry point named\n";
             echo "<select name='entname' size='1'>\n";
             echo "  <option value=''>...</option>\n";
@@ -373,7 +375,7 @@ function show_one_extension($extrow)
             echo "<input type='submit' name='form_submit' value='Go!'>\n";
             echo "</form>\n";
 
-            echo "<form>\n";
+            echo "$form\n";
             echo "I want to delete the entry point named\n";
             echo "<select name='entname' size='1'>\n";
             echo "  <option value=''>...</option>\n";
@@ -474,13 +476,15 @@ function op_showext()
 
 function render_search_ui()
 {
+    $form = get_form_tag();
+
     print <<<EOF
 
 <p>
 Where do you want to go today?
 
 <p>
-<form action="${_SERVER['PHP_SELF']}">
+$form
   I want a list of all known
   <select name="wanttype" size="1">
     <option selected value="extension">extensions</option>
@@ -495,7 +499,7 @@ Where do you want to go today?
 ...or...
 
 <p>
-<form action="${_SERVER['PHP_SELF']}">
+$form
   I want
   <select name="wanttype" size="1">
     <option selected value="extension">an extension</option>

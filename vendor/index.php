@@ -119,6 +119,7 @@ function op_addtoken()
     } // if
     else   // put out a confirmation...
     {
+        $form = get_form_tag();
         $htmlextname = htmlentities($extname, ENT_QUOTES);
         $htmltokname = htmlentities($tokname, ENT_QUOTES);
 
@@ -129,7 +130,7 @@ function op_addtoken()
         echo "About to add a token named '$htmltokname',<br>\n";
         echo "with value ${tokval}${hex}.<br>\n";
         echo "...if you're sure, click 'Confirm'...<br>\n";
-        echo "<form>\n";
+        echo "$form\n";
         echo "<input type='hidden' name='operation' value='op_addtoken'>\n";
         echo "<input type='hidden' name='tokname' value='$htmltokname'>\n";
         echo "<input type='hidden' name='tokval' value='$tokval'>\n";
@@ -184,12 +185,13 @@ function op_addentrypoint()
     } // if
     else   // put out a confirmation...
     {
+        $form = get_form_tag();
         $htmlentname = htmlentities($entname, ENT_QUOTES);
         $htmlextname = htmlentities($extname, ENT_QUOTES);
 
         echo "About to add an entry point named '$htmlentname'<br>\n";
         echo "...if you're sure, click 'Confirm'...<br>\n";
-        echo "<form>\n";
+        echo "$form\n";
         echo "<input type='hidden' name='operation' value='op_addentrypoint'>\n";
         echo "<input type='hidden' name='entrypointname' value='$htmlentname'>\n";
         echo "<input type='hidden' name='extid' value='$extid'>\n";
@@ -241,11 +243,12 @@ function op_addextension()
     } // if
     else   // put out a confirmation...
     {
+        $form = get_form_tag();
         $htmlname = htmlentities($extname, ENT_QUOTES);
         echo "About to add an extension named '$htmlname'.<br>\n";
         echo "You can add tokens and entry points to this extension in a moment.<br>\n";
         echo "...if you're sure, click 'Confirm'...<br>\n";
-        echo "<form>\n";
+        echo "$form\n";
         echo "<input type='hidden' name='extname' value='$htmlname'>\n";
         echo "<input type='hidden' name='operation' value='op_addextension'>\n";
         echo "<input type='hidden' name='iamsure' value='${_SERVER['REMOTE_ADDR']}'>\n";
@@ -301,6 +304,7 @@ function op_delext()
     } // if
     else   // put out a confirmation...
     {
+        $form = get_form_tag();
         $htmlextname = htmlentities($extname, ENT_QUOTES);
         echo "About to delete an extension named '$htmlextname'<br>\n";
         echo "<b><font size='+1'>\n";
@@ -308,7 +312,7 @@ function op_delext()
         echo "THIS ALSO DELETES ALL ASSOCIATED TOKENS AND ENTRY POINTS!<br>\n";
         echo "</font></b>\n";
         echo "...if you're sure, click 'Confirm'...<br>\n";
-        echo "<form>\n";
+        echo "$form\n";
         echo "<input type='hidden' name='extid' value='$extid'>\n";
         echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
         echo "<input type='hidden' name='operation' value='op_delext'>\n";
@@ -343,6 +347,7 @@ function op_deltok()
     } // if
     else   // put out a confirmation...
     {
+        $form = get_form_tag();
         $htmlextname = htmlentities($extname, ENT_QUOTES);
         $htmltokname = htmlentities($tokname, ENT_QUOTES);
         echo "About to delete a token named '$htmltokname'<br>\n";
@@ -350,7 +355,7 @@ function op_deltok()
         echo "THERE IS NO UNDELETE. MAKE SURE YOU <u>REALLY</u> WANT TO DO THIS.<br>\n";
         echo "</font></b>\n";
         echo "...if you're sure, click 'Confirm'...<br>\n";
-        echo "<form>\n";
+        echo "$form\n";
         echo "<input type='hidden' name='extid' value='$extid'>\n";
         echo "<input type='hidden' name='tokname' value='$htmltokname'>\n";
         echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
@@ -386,6 +391,7 @@ function op_delent()
     } // if
     else   // put out a confirmation...
     {
+        $form = get_form_tag();
         $htmlextname = htmlentities($extname, ENT_QUOTES);
         $htmlentname = htmlentities($entname, ENT_QUOTES);
         echo "About to delete an entry point named '$htmlentname'<br>\n";
@@ -393,7 +399,7 @@ function op_delent()
         echo "THERE IS NO UNDELETE. MAKE SURE YOU <u>REALLY</u> WANT TO DO THIS.<br>\n";
         echo "</font></b>\n";
         echo "...if you're sure, click 'Confirm'...<br>\n";
-        echo "<form>\n";
+        echo "$form\n";
         echo "<input type='hidden' name='extid' value='$extid'>\n";
         echo "<input type='hidden' name='entname' value='$htmlentname'>\n";
         echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
@@ -430,11 +436,12 @@ function op_renameext()
     } // if
     else   // put out a confirmation...
     {
+        $form = get_form_tag();
         $htmlnewval = htmlentities($newval, ENT_QUOTES);
         $htmlextname = htmlentities($extname, ENT_QUOTES);
         echo "About to rename an extension named '$htmlextname' to '$htmlnewval'.<br>\n";
         echo "...if you're sure, click 'Confirm'...<br>\n";
-        echo "<form>\n";
+        echo "$form\n";
         echo "<input type='hidden' name='iamsure' value='${_SERVER['REMOTE_ADDR']}'>\n";
         echo "<input type='hidden' name='extid' value='$extid'>\n";
         echo "<input type='hidden' name='newval' value='$htmlnewval'>\n";
@@ -492,12 +499,13 @@ function op_renameent()
     } // if
     else   // put out a confirmation...
     {
+        $form = get_form_tag();
         $htmlnewval = htmlentities($newval, ENT_QUOTES);
         $htmlextname = htmlentities($extname, ENT_QUOTES);
         $htmlentname = htmlentities($entname, ENT_QUOTES);
         echo "About to rename an entry point named '$htmlentname' to '$htmlnewval'.<br>\n";
         echo "...if you're sure, click 'Confirm'...<br>\n";
-        echo "<form>\n";
+        echo "$form\n";
         echo "<input type='hidden' name='iamsure' value='${_SERVER['REMOTE_ADDR']}'>\n";
         echo "<input type='hidden' name='extid' value='$extid'>\n";
         echo "<input type='hidden' name='newval' value='$htmlnewval'>\n";
@@ -556,12 +564,13 @@ function op_renametok()
     } // if
     else   // put out a confirmation...
     {
+        $form = get_form_tag();
         $htmlnewval = htmlentities($newval, ENT_QUOTES);
         $htmlextname = htmlentities($extname, ENT_QUOTES);
         $htmltokname = htmlentities($tokname, ENT_QUOTES);
         echo "About to rename a token named '$htmltokname' to '$htmlnewval'.<br>\n";
         echo "...if you're sure, click 'Confirm'...<br>\n";
-        echo "<form>\n";
+        echo "$form\n";
         echo "<input type='hidden' name='iamsure' value='${_SERVER['REMOTE_ADDR']}'>\n";
         echo "<input type='hidden' name='extid' value='$extid'>\n";
         echo "<input type='hidden' name='newval' value='$htmlnewval'>\n";
@@ -620,6 +629,7 @@ function op_revaluetok()
     } // if
     else   // put out a confirmation...
     {
+        $form = get_form_tag();
         $htmlnewval = htmlentities($newval, ENT_QUOTES);
         $htmlextname = htmlentities($extname, ENT_QUOTES);
         $htmltokname = htmlentities($tokname, ENT_QUOTES);
@@ -628,7 +638,7 @@ function op_revaluetok()
             $hex = sprintf(" (0x%X hex)", $newval);  // !!! FIXME: faster way to do this?
         echo "About to change the value of a token named '$htmltokname' to ${newval}${hex}.<br>\n";
         echo "...if you're sure, click 'Confirm'...<br>\n";
-        echo "<form>\n";
+        echo "$form\n";
         echo "<input type='hidden' name='iamsure' value='${_SERVER['REMOTE_ADDR']}'>\n";
         echo "<input type='hidden' name='extid' value='$extid'>\n";
         echo "<input type='hidden' name='newval' value='$htmlnewval'>\n";
@@ -643,13 +653,14 @@ function op_revaluetok()
 
 function render_add_ui()
 {
+    $form = get_form_tag();
     echo <<< EOF
 
 <p>
 ...or...
 
 <p>
-<form action="${_SERVER['PHP_SELF']}">
+$form
   <b>Vendor:</b>
   I want to add a new extension
   named <input type="text" name="extname" value="">.
