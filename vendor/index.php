@@ -115,7 +115,7 @@ function op_addentrypoint()
     } // if
 
     // see if it's already in the database...
-    $sqlentname = db_escape_string($tokname);
+    $sqlentname = db_escape_string($entname);
     $sql = "select id from alextreg_entrypoints where entrypointname='$sqlentname'";
     $query = do_dbquery($sql);
     if ($query == false)
