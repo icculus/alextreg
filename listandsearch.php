@@ -380,6 +380,21 @@ Where do you want to go today?
 
 <p>
 <form method="post" action="${_SERVER['PHP_SELF']}">
+  I want a list of all known
+  <select name="wanttype" size="1">
+    <option selected value="extension">extensions</option>
+    <option value="tokenname">tokens</option>
+    <option value="entrypoint">entry points</option>
+  </select>.
+  <input type="hidden" name="operation" value="op_findall">
+  <input type="submit" name="form_submit" value="Go!">
+</form>
+
+<p>
+...or...
+
+<p>
+<form method="post" action="${_SERVER['PHP_SELF']}">
   I want
   <select name="wanttype" size="1">
     <option selected value="extension">an extension</option>
@@ -392,21 +407,6 @@ Where do you want to go today?
   <input type="hidden" name="operation" value="op_findone">
   <input type="submit" name="form_submit" value="Go!">
   <input type="reset" value="Clear">
-</form>
-
-<p>
-...or...
-
-<p>
-<form method="post" action="${_SERVER['PHP_SELF']}">
-  I want a list of all known
-  <select name="wanttype" size="1">
-    <option selected value="extension">extensions</option>
-    <option value="tokenname">tokens</option>
-    <option value="entrypoint">entry points</option>
-  </select>.
-  <input type="hidden" name="operation" value="op_findall">
-  <input type="submit" name="form_submit" value="Go!">
 </form>
 
 EOF;
