@@ -22,16 +22,38 @@ function render_extension_list($wantname, $query)
     print("</ul>\n<p>Total results: $count\n");
 } // render_extension_list
 
+function render_token_list($wantname, $query)
+{
+    $count = db_num_rows($query);
+    if (($wantname) and ($count > 1))
+        write_error('(Unexpected number of results from database!)');
+
+    print("<ul>\n");
+    while ( ($row = db_fetch_array($query)) != false )
+    {
+        $url = get_alext_url($row['extname']);
+        $hex = sprintf("0x%X", $row['tokenval']);  // !!! FIXME: faster way to do this?
+        print("  <li>${row['tokenname']} ($hex)");
+        print(" from <a href='$url'>${row['extname']}</a>\n");
+    } // while
+    print("</ul>\n<p>Total results: $count\n");
+} // render_token_list
+
 
 $queryfuncs['extension'] = 'find_extension';
 function find_extension($wantname)
 {
-    $sql = 'select extname from alextreg_extensions';
+    $flags = is_authorized_vendor() ?
+    $sql = 'select extname from alextreg_extensions' .
+           ' where (1==1)';
+
+    if (!is_authorized_vendor())
+        $sql .= ' and (flags & $extflags_public)';
 
     if ($wantname)
     {
         $sqlwantname = db_escape_string($wantname);
-        $sql .= " where extname='$sqlwantname'";
+        $sql .= " and (extname='$sqlwantname')";
     } // if
 
     $query = do_dbquery($sql);
@@ -51,28 +73,17 @@ function find_token($additionalsql, $wantname)
            ' ext.extname as extname' .
            ' from alextreg_tokens as tok' .
            ' left outer join alextreg_extensions as ext' .
-           ' on tok.extid=ext.id' .
+           ' on tok.extid=ext.id where (1==1)' .
            $additionalsql;
+
+    if (!is_authorized_vendor())
+        $sql .= ' and (ext.flags & $extflags_public)';
 
     $query = do_dbquery($sql);
     if ($query == false)
         return;  // error output is handled in database.php ...
     else
-    {
-        $count = db_num_rows($query);
-        if (($wantname) and ($count > 1))
-            write_error('(Unexpected number of results from database!)');
-
-        print("<ul>\n");
-        while ( ($row = db_fetch_array($query)) != false )
-        {
-            $url = get_alext_url($row['extname']);
-            $hex = sprintf("0x%X", $row['tokenval']);  // !!! FIXME: faster way to do this?
-            print("  <li>${row['tokenname']} ($hex)");
-            print(" from <a href='$url'>${row['extname']}</a>\n");
-        } // while
-        print("</ul>\n<p>Total results: $count\n");
-    } // else
+        render_token_list($wantname, $query);
 
     db_free_result($query);
 } // find_token
@@ -85,7 +96,7 @@ function find_tokenname($wantname)
     if ($wantname)
     {
         $sqlwantname = db_escape_string($wantname);
-        $additionalsql .= " where tok.tokenname='$sqlwantname'";
+        $additionalsql .= " and (tok.tokenname='$sqlwantname')";
     } // if
 
     find_token($additionalsql, $wantname);
@@ -113,12 +124,15 @@ function find_entrypoint($wantname)
            ' ext.extname as extname' .
            ' from alextreg_entrypoints as ent' .
            ' left outer join alextreg_extensions as ext' .
-           ' on ent.extid=ext.id';
+           ' on ent.extid=ext.id where (1==1)';
+
+    if (!is_authorized_vendor())
+        $sql .= ' and (ext.flags & $extflags_public)';
 
     if ($wantname)
     {
         $sqlwantname = db_escape_string($wantname);
-        $sql .= " where ent.entrypointname='$sqlwantname'";
+        $sql .= " and (ent.entrypointname='$sqlwantname')";
     } // if
 
     $query = do_dbquery($sql);
@@ -199,6 +213,10 @@ function show_one_extension($extrow)
     $sql = 'select * from alextreg_tokens as tok' .
            ' left outer join alextreg_extensions as ext' .
            ' on tok.extid=ext.id';
+
+    if (!is_authorized_vendor())
+        $sql .= ' where (ext.flags & $extflags_public)';
+
     $query = do_dbquery($sql);
     if ($query == false)
         return;  // uh...?
@@ -215,12 +233,26 @@ function show_one_extension($extrow)
         } // while
     } // else
     db_free_result($query);
+
+    if (is_authorized_vendor())
+    {
+        echo "  <li>\n<form>\n";
+        echo "Add a new token named <input type='text' name='wantname'>\n";
+        echo "<input type='hidden' name='extid' value='$extid'>\n";
+        echo "<input type='hidden' name='operation' value='op_addtoken'>\n";
+        echo "<input type='submit' name='form_submit' value='Go!'>\n";
+        echo "</form>\n";
+    } // if
+
     echo "</ul>\n";
 
     echo "<p>Entry points:\n<ul>\n";
     $sql = 'select * from alextreg_entrypoints as ent' .
            ' left outer join alextreg_extensions as ext' .
            ' on ent.extid=ext.id';
+
+    if (!is_authorized_vendor())
+        $sql .= ' where (ext.flags & $extflags_public)';
 
     $query = do_dbquery($sql);
     if ($query == false)
@@ -237,6 +269,17 @@ function show_one_extension($extrow)
         } // while
     } // else
     db_free_result($query);
+
+    if (is_authorized_vendor())
+    {
+        echo "  <li>\n<form>\n";
+        echo "Add a new entry point named <input type='text' name='wantname'>\n";
+        echo "<input type='hidden' name='extid' value='$extid'>\n";
+        echo "<input type='hidden' name='operation' value='op_addentrypoint'>\n";
+        echo "<input type='submit' name='form_submit' value='Go!'>\n";
+        echo "</form>\n";
+    } // if
+
     echo "</ul>\n";
 
     echo "<hr>\n";
@@ -265,6 +308,9 @@ function op_showext()
     $sqlextname = db_escape_string($extname);
     $sql = "select * from alextreg_extensions" .
            " where extname='$sqlextname'";
+
+    if (!is_authorized_vendor())
+        $sql .= ' and (flags & $extflags_public)';
 
     $query = do_dbquery($sql);
     if ($query == false)
