@@ -110,7 +110,7 @@ function update_vendor_login($loginname, $pw)
 
     // add in new or updated login.
     fputs($io, "${loginname}:${cryptedpw}\n");
-    update_papertrail("$action login for vendor '$loginname'", '', false);
+    update_papertrail("$action login for vendor '$loginname'", '', NULL);
 } // update_vendor_login
 
 
