@@ -117,9 +117,11 @@ function find_anything($wantname)
 $operations['op_findone'] = 'op_findone';
 function op_findone()
 {
+    global $queryfuncs;
+
     $wanttype = $_REQUEST['wanttype'];
     $wantname = $_REQUEST['wantname'];
-    write_debug("called op_findone($wantname, $wanttype)");
+    write_debug("called op_findone($wanttype, $wantname)");
 
     $queryfunc = $queryfuncs[$wanttype];
     if (!isset($queryfunc))
@@ -128,7 +130,7 @@ function op_findone()
         return;
     } // if
 
-    $queryfunc($wantname, true);
+    $queryfunc($wantname);
 } // op_findone
 
 
