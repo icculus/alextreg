@@ -640,6 +640,10 @@ function op_revaluetok()
     } // if
     db_free_result($query);
 
+    $hex = '';
+    if (sscanf($newval, "0x%X", &$dummy) != 1)
+        $hex = sprintf(" (0x%X hex)", $newval);  // !!! FIXME: faster way to do this?
+
     // Just a small sanity check.
     $cookie = $_REQUEST['iamsure'];
     if ((!empty($cookie)) and ($cookie == $_SERVER['REMOTE_ADDR']))
@@ -652,7 +656,7 @@ function op_revaluetok()
                " where tokenname='$sqltokname'";
         if (do_dbupdate($sql) == 1)
         {
-            update_papertrail("Token '$tokname' revalued to '$newval'", $sql, $extid);
+            update_papertrail("Token '$tokname' revalued to '$newval'${hex}", $sql, $extid);
             do_showext($extname);
         } // if
     } // if
@@ -662,9 +666,6 @@ function op_revaluetok()
         $htmlnewval = htmlentities($newval, ENT_QUOTES);
         $htmlextname = htmlentities($extname, ENT_QUOTES);
         $htmltokname = htmlentities($tokname, ENT_QUOTES);
-        $hex = '';
-        if (sscanf($newval, "0x%X", &$dummy) != 1)
-            $hex = sprintf(" (0x%X hex)", $newval);  // !!! FIXME: faster way to do this?
         echo "About to change the value of a token named '$htmltokname' to ${newval}${hex}.<br>\n";
         echo "...if you're sure, click 'Confirm'...<br>\n";
         echo "$form\n";
