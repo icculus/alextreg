@@ -4,7 +4,7 @@
 //  like: $operations['op_blow'] = 'blow_handler';
 //  function blow_handler() { blah(); }
 
-$operations = new array();
+$operations = array();
 
 function do_operation()
 {
