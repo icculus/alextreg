@@ -62,8 +62,8 @@ function op_renderpapertrail()
         $htmlentrydate = htmlentities($row['entrydate'], ENT_QUOTES);
         $htmlsql = '';
         if ($showsql)
-            $htmlsql = "<br>\n'" . htmlentities($row['sql'], ENT_QUOTES) . "'";
-        echo "  <li>$htmlaction: $htmlauthor, ${htmlentrydate}${htmlsql}\n";
+            $htmlsql = "<br>\n<code>'" . htmlentities($row['sql'], ENT_QUOTES) . "'</code>";
+        echo "  <li><b>$htmlaction</b>: <i>by $htmlauthor<i>, on ${htmlentrydate}</i>${htmlsql}\n";
     } // while
     db_free_result($query);
 
