@@ -1,6 +1,6 @@
 <?php
 
-$disable_debug = false;
+$disable_debug = ($_REQUEST['debug'] == '1');
 
 $extflags_public = (1 << 0);
 
