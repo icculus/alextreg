@@ -129,6 +129,8 @@ function find_tokenvalue($wantname)
     $additionalsql = '';
     if ($wantname)
     {
+        if (!is_numeric($wantname))
+            return;
         $sqlwantname = db_escape_string($wantname);
         $additionalsql .= " and (tok.tokenval=$sqlwantname)";
     } // if
