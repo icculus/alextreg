@@ -62,6 +62,35 @@ function do_dbquery($sql, $link = NULL)
 } // do_dbquery
 
 
+function do_dbinsert($sql, $expected_rows = 1, $link = NULL)
+{
+    if ($link == NULL)
+        $link = get_dblink();
+
+    if ($link == NULL)
+        return(false);
+
+    write_debug("SQL insert: [$sql]");
+
+    $rc = mysql_query($sql, $link);
+    if ($rc == false)
+    {
+        $err = mysql_error();
+        write_error("Problem in INSERT statement: {$err}");
+        return(false);
+    } // if
+
+    $retval = mysql_affected_rows($link);
+    if (($expected_rows >= 0) and ($retval != $expected_rows))
+    {
+        $err = mysql_error();
+        write_error("Database insertion error: {$err}");
+    } // if
+
+    return($retval);
+} // do_dbinsert
+
+
 function db_num_rows($query)
 {
     return(mysql_num_rows($query));
