@@ -203,27 +203,17 @@ function op_addextension()
 $operations['op_showhideext'] = 'op_showhideext';
 function op_showhideext()
 {
-echo '1<br>\n';
     if (!welcome_here()) return;
-echo '2<br>\n';
     if (!get_input_string('extname', 'extension name', $extname)) return;
-echo '3<br>\n';
     if (!get_input_int('extid', 'extension id', $extid)) return;
-echo '4<br>\n';
     if (!get_input_bool('newval', 'toggle value', $newval)) return;
-echo '5<br>\n';
 
     $sql = "update alextreg_extensions set public=$newval, lastedit=NOW() where id=$extid";
-echo '6<br>\n';
     if (do_dbupdate($sql) == 1)
     {
-echo '7<br>\n';
         echo "<font color='#00FF00'>Extension updated.</font><br>\n";
-echo '8<br>\n';
         do_showext($extname);
-echo '9<br>\n';
     } // if
-echo '10<br>\n';
 } // op_showhideext
 
 
