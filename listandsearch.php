@@ -209,6 +209,10 @@ function show_one_extension($extrow)
     $public = $extrow['public'];
     $wikiurl = get_alext_wiki_url($extname);
     $htmlextname = htmlentities($extname, ENT_QUOTES);
+
+    if ((!$public) and (!$is_vendor))  // sanity check.
+        return;
+
     echo "<p>$htmlextname (<a href='${wikiurl}'>docs</a>)\n";
 
     $tab = '&nbsp;&nbsp;&nbsp;&nbsp;';
@@ -216,6 +220,31 @@ function show_one_extension($extrow)
     echo "${tab}Registered on ${extrow['entrydate']} by ${extrow['author']}<br>\n";
     echo "${tab}Last edited on ${extrow['lastedit']} by ${extrow['lasteditauthor']}<br>\n";
     echo "</font>\n";
+
+    // get the tokens, move it to an array of db rows...
+    $tokens = array();
+    $sql = "select * from alextreg_tokens where (extid=$extid)";
+    if (!$is_vendor)
+        $sql .= ' and (ext.public=1)';
+
+    $query = do_dbquery($sql);
+    if ($query == false)
+        return;  // uh...?
+    while ( ($row = db_fetch_array($query)) != false )
+        $tokens[] = $row;
+    db_free_result($query);
+
+    $entrypoints = array();
+    $sql = "select * from alextreg_entrypoints where (extid=$extid)";
+    if (!$is_vendor)
+        $sql .= ' and (ext.public=1)';
+
+    $query = do_dbquery($sql);
+    if ($query == false)
+        return;  // uh...?
+    while ( ($row = db_fetch_array($query)) != false )
+        $entrypoints[] = $row;
+    db_free_result($query);
 
     if ($is_vendor)
     {
@@ -272,18 +301,11 @@ function show_one_extension($extrow)
 
     echo "<p>Tokens:\n<ul>\n";
 
-    $sql = "select * from alextreg_tokens where (extid=$extid)";
-    if (!$is_vendor)
-        $sql .= ' and (ext.public=1)';
-
-    $query = do_dbquery($sql);
-    if ($query == false)
-        return;  // uh...?
-    else if (db_num_rows($query) == 0)
+    if (count($tokens) == 0)
         echo "  <li> (no tokens.)\n";
     else
     {
-        while ( ($row = db_fetch_array($query)) != false )
+        foreach ($tokens as $row)
         {
             $hex = sprintf("0x%X", $row['tokenval']);  // !!! FIXME: faster way to do this?
             echo "  <li> ${row['tokenname']} ($hex)";
@@ -292,23 +314,14 @@ function show_one_extension($extrow)
             echo "\n";
         } // while
     } // else
-    db_free_result($query);
-
     echo "</ul>\n";
 
     echo "<p>Entry points:\n<ul>\n";
-    $sql = "select * from alextreg_entrypoints where (extid=$extid)";
-    if (!$is_vendor)
-        $sql .= ' and (ext.public=1)';
-
-    $query = do_dbquery($sql);
-    if ($query == false)
-        return;  // uh...?
-    else if (db_num_rows($query) == 0)
+    if (count($entrypoints) == 0)
         echo "  <li> (no entry points.)\n";
     else
     {
-        while ( ($row = db_fetch_array($query)) != false )
+        foreach ($tokens as $row)
         {
             echo "  <li> ${row['entrypointname']}";
             //echo " added ${row['entrydate']},";
@@ -316,7 +329,6 @@ function show_one_extension($extrow)
             echo "\n";
         } // while
     } // else
-    db_free_result($query);
 
     echo "</ul>\n";
 
