@@ -86,8 +86,8 @@ function update_vendor_login($loginname, $pw, $allowreplace)
     } // if
 
     $cmd = escapeshellcmd("htpasswd -b -n $loginname $pw");
-    $cryptedpw = @system($cmd);
-    if ($cryptedpw == false)
+    $cryptedpw = `$cmd`;
+    if (empty($cryptedpw))
     {
         write_error("Can't crypt password");
         return;
