@@ -304,7 +304,7 @@ function show_one_extension($extrow)
             echo "  <option value=''>...</option>\n";
             foreach ($tokens as $row)
             {
-                $name = htmlentities(${row['tokenname']}, ENT_QUOTES);
+                $name = htmlentities($row['tokenname'], ENT_QUOTES);
                 echo "  <option value='$name'>$name</option>\n";
             } // foreach
             echo "</select>\n";
@@ -323,7 +323,7 @@ function show_one_extension($extrow)
             echo "  <option value=''>...</option>\n";
             foreach ($entrypoints as $row)
             {
-                $name = htmlentities(${row['entrypointname']}, ENT_QUOTES);
+                $name = htmlentities($row['entrypointname'], ENT_QUOTES);
                 echo "  <option value='$name'>$name</option>\n";
             } // foreach
             echo "</select>\n";
