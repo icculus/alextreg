@@ -54,13 +54,18 @@ function get_alext_url($extname)
 } // get_alext_url
 
 
-function get_input_sanitized($reqname, $reqtype, &$reqval)
+function get_input_sanitized($reqname, $reqtype, &$reqval, $defval=false)
 {
     $val = $_REQUEST[$reqname];
     if (!isset($val))
     {
-        write_error("No $reqtype specified.");
-        return false;
+        if (!$defval)
+        {
+            write_error("No $reqtype specified.");
+            return false;
+        } // if
+        $reqval = $defval;
+        return true;
     } // if
 
     $reqval = trim($val);
@@ -74,16 +79,16 @@ function get_input_sanitized($reqname, $reqtype, &$reqval)
 } // get_input_sanitized
 
 
-function get_input_string($reqname, $reqtype, &$reqval)
+function get_input_string($reqname, $reqtype, &$reqval, $defval=false)
 {
-    return get_input_sanitized($reqname, $reqtype, $reqval);
+    return get_input_sanitized($reqname, $reqtype, $reqval, $defval);
 } // get_input_string
 
 
-function get_input_bool($reqname, $reqtype, &$reqval)
+function get_input_bool($reqname, $reqtype, &$reqval, $defval=false)
 {
     $tmp = '';
-    if (!get_input_sanitized($reqname, $reqtype, $tmp))
+    if (!get_input_sanitized($reqname, $reqtype, $tmp, $defval))
         return false;
 
     $tmp = strtolower($tmp);
@@ -108,9 +113,9 @@ function get_input_bool($reqname, $reqtype, &$reqval)
 } // get_input_bool
 
 
-function get_input_number($reqname, $reqtype, &$reqval)
+function get_input_number($reqname, $reqtype, &$reqval, $defval=false)
 {
-    if (!get_input_sanitized($reqname, $reqtype, $reqval))
+    if (!get_input_sanitized($reqname, $reqtype, $reqval, $defval))
         return false;
 
     if (sscanf($reqval, "0x%X", &$hex) == 1) // it's a 0xHEX value.
@@ -126,7 +131,7 @@ function get_input_number($reqname, $reqtype, &$reqval)
 } // get_input_number
 
 
-function get_input_int($reqname, $reqtype, &$reqval)
+function get_input_int($reqname, $reqtype, &$reqval, $defval=false)
 {
     if (!get_input_number($reqname, $reqtype, $reqval))
         return false;
@@ -136,7 +141,7 @@ function get_input_int($reqname, $reqtype, &$reqval)
 } // get_input_int
 
 
-function get_input_float($reqname, $reqtype, &$reqval)
+function get_input_float($reqname, $reqtype, &$reqval, $defval=false)
 {
     if (!get_input_number($reqname, $reqtype, $reqval))
         return false;
