@@ -73,6 +73,15 @@ CREATE TABLE alextreg_entrypoints (
     primary key (id)
 );
 
+CREATE TABLE alextreg_papertrail (
+    id int not null auto_increment,
+    action text not null,
+    sql text not null,
+    author varchar(128) not null,
+    entrydate datetime not null,
+    primary key (id)
+);
+
 GRANT SELECT, INSERT, UPDATE, DELETE ON alextreg_entrypoints TO alextreg@localhost;
 
 FLUSH PRIVILEGES;

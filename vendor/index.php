@@ -17,6 +17,58 @@ function welcome_here()
     return true;
 } // welcome_here
 
+
+function update_papertrail($action, $donesql, $extid)
+{
+    $sqlauthor = db_escape_string($_SERVER['REMOTE_USER']);
+    $sqlsql = db_escape_string($donesql);
+    $sqlaction = db_escape_string($action);
+    $htmlaction = htmlentities($action, ENT_QUOTES);
+
+    echo "<font color='#00FF00'>$htmlaction</font><br>\n";
+
+    // Update extensions.lastedit field if this involves an extension.
+    if (isset($extid))
+    {
+        $sql = "update alextreg_extensions set lastedit=NOW(), lasteditauthor='$sqlauthor' where id=$extid";
+        do_dbupdate($sql);
+    } // if
+
+    // Fill in the papertrail.
+    $sql = 'insert into alextreg_papertrail' .
+           ' (action, sql, author, entrydate)' .
+           " values ('$sqlaction', '$sqlsql', '$sqlauthor', NOW())";
+    do_dbinsert($sql);
+} // update_papertrail
+
+
+$operations['op_renderpapertrail'] = 'op_renderpapertrail';
+function op_renderpapertrail()
+{
+    $sql = 'select * from alextreg_papertrail order by entrydate';
+    $query = do_dbquery($sql);
+    if ($query == false)
+        return;  // error output is handled in database.php ...
+
+    echo "<u>Current paper trail (oldest entries first)...</u>\n";
+    echo "<ul>\n";
+    
+    while ( ($row = db_fetch_array($query)) != false )
+    {
+        $htmlaction = htmlentities(${row['action']}, ENT_QUOTES);
+        $htmlauthor = htmlentities(${row['author']}, ENT_QUOTES);
+        $htmlentrydate = htmlentities(${row['entrydate']}, ENT_QUOTES);
+        $htmlsql = htmlentities(${row['sql']}, ENT_QUOTES);
+        echo "  <li>$htmlaction: $htmlauthor, $htmlentrydate<br>\n";
+        echo "      '$htmlsql'\n";
+    } // while
+    db_free_result($query);
+
+    echo "</ul>\n";
+    echo "<p>End of papertrail.\n";
+} // op_renderpapertrail
+
+
 $operations['op_addtoken'] = 'op_addtoken';
 function op_addtoken()
 {
@@ -53,14 +105,12 @@ function op_addtoken()
     {
         $sqlauthor = db_escape_string($_SERVER['REMOTE_USER']);
         // ok, add it to the database.
-        $sql = "insert into alextreg_tokens" .  // !!! FIXME: Should have author associated with it!
+        $sql = "insert into alextreg_tokens" .
                " (tokenname, tokenval, extid, author, entrydate, lasteditauthor, lastedit)" .
                " values ('$sqltokname', $tokval, $extid, '$sqlauthor', NOW(), '$sqlauthor', NOW())";
         if (do_dbinsert($sql) == 1)
         {
-            echo "<font color='#00FF00'>Token added.</font><br>\n";
-            $sql = "update alextreg_extensions set lastedit=NOW(), lasteditauthor='$sqlauthor' where id=$extid";
-            do_dbupdate($sql);
+            update_papertrail("Token '$tokname' added", $sql, $extid);
             do_showext($extname);
         } // if
     } // if
@@ -125,9 +175,7 @@ function op_addentrypoint()
                " values ('$sqlentname', $extid, '$sqlauthor', NOW(), '$sqlauthor', NOW())";
         if (do_dbinsert($sql) == 1)
         {
-            echo "<font color='#00FF00'>Entry point added.</font><br>\n";
-            $sql = "update alextreg_extensions set lastedit=NOW(), lasteditauthor='$sqlauthor' where id=$extid";
-            do_dbupdate($sql);
+            update_papertrail("Entry point '$entname' added", $sql, $extid);
             do_showext($extname);
         } // if
     } // if
@@ -184,7 +232,7 @@ function op_addextension()
                " values ('$sqlwantname', 0, '$sqlauthor', NOW(), '$sqlauthor', NOW())";
         if (do_dbinsert($sql) == 1)
         {
-            echo "<font color='#00FF00'>Extension added.</font><br>\n";
+            update_papertrail("Extension '$extname' added", $sql, NULL);
             do_showext($wantname);
         } // if
     } // if
@@ -216,7 +264,8 @@ function op_showhideext()
     $sql = "update alextreg_extensions set public=$newval, lastedit=NOW(), lasteditauthor='$sqlauthor' where id=$extid";
     if (do_dbupdate($sql) == 1)
     {
-        echo "<font color='#00FF00'>Extension updated.</font><br>\n";
+        $pubpriv = ($newval) ? "public" : "private";
+        update_papertrail("Extension '$extname' toggled $pubpriv", $sql, NULL);
         do_showext($extname);
     } // if
 } // op_showhideext
@@ -238,13 +287,13 @@ function op_delext()
         $sql = "delete from alextreg_extensions where id=$extid";
         if (do_dbdelete($sql) == 1)
         {
-            echo "<font color='#00FF00'>EXTENSION DELETED!</font><br>\n";
+            update_papertrail("EXTENSION '$extname' DELETED", $sql, NULL);
             $sql = "delete from alextreg_tokens where extid=$extid";
             $rc = do_dbdelete($sql, -1);
-            echo "<font color='#00FF00'>DELETED $rc TOKENS!</font><br>\n";
+            update_papertrail("DELETED $rc TOKENS", $sql, NULL);
             $sql = "delete from alextreg_entrypoints where extid=$extid";
             $rc = do_dbdelete($sql, -1);
-            echo "<font color='#00FF00'>DELETED $rc ENTRY POINTS!</font><br>\n";
+            update_papertrail("DELETED $rc ENTRY POINTS", $sql, NULL);
         } // if
     } // if
     else   // put out a confirmation...
@@ -284,9 +333,7 @@ function op_deltok()
         $sql = "delete from alextreg_tokens where tokenname='$sqltokname'";
         if (do_dbdelete($sql) == 1)
         {
-            echo "<font color='#00FF00'>TOKEN DELETED!</font><br>\n";
-            $sql = "update alextreg_extensions set lastedit=NOW(), lasteditauthor='$sqlauthor' where id=$extid";
-            do_dbupdate($sql);
+            update_papertrail("TOKEN '$tokname' DELETED", $sql, $extid);
             do_showext($extname);
         } // if
     } // if
@@ -329,9 +376,7 @@ function op_delent()
         $sql = "delete from alextreg_entrypoints where entrypointname='$sqlentname'";
         if (do_dbdelete($sql) == 1)
         {
-            echo "<font color='#00FF00'>ENTRY POINT DELETED!</font><br>\n";
-            $sql = "update alextreg_extensions set lastedit=NOW(), lasteditauthor='$sqlauthor' where id=$extid";
-            do_dbupdate($sql);
+            update_papertrail("ENTRY POINT '$entname' DELETED", $sql, $extid);
             do_showext($extname);
         } // if
     } // if
@@ -375,7 +420,7 @@ function op_renameext()
                " lastedit=NOW(), lasteditauthor='$sqlauthor' where id=$extid";
         if (do_dbupdate($sql) == 1)
         {
-            echo "<font color='#00FF00'>Extension updated.</font><br>\n";
+            update_papertrail("Extension '$entname' renamed to '$newval'", $sql, NULL);
             do_showext($newval);
         } // if
     } // if
@@ -437,9 +482,7 @@ function op_renameent()
                " where entrypointname='$sqlentname'";
         if (do_dbupdate($sql) == 1)
         {
-            echo "<font color='#00FF00'>Entry point updated.</font><br>\n";
-            $sql = "update alextreg_extensions set lastedit=NOW(), lasteditauthor='$sqlauthor' where id=$extid";
-            do_dbupdate($sql);
+            update_papertrail("Entry point '$entname' renamed to '$newval'", $sql, $extid);
             do_showext($extname);
         } // if
     } // if
@@ -503,9 +546,7 @@ function op_renametok()
                " where tokenname='$sqltokname'";
         if (do_dbupdate($sql) == 1)
         {
-            echo "<font color='#00FF00'>Token updated.</font><br>\n";
-            $sql = "update alextreg_extensions set lastedit=NOW(), lasteditauthor='$sqlauthor' where id=$extid";
-            do_dbupdate($sql);
+            update_papertrail("Token '$tokname' renamed to '$newval'", $sql, $extid);
             do_showext($extname);
         } // if
     } // if
@@ -569,9 +610,7 @@ function op_revaluetok()
                " where tokenname='$sqltokname'";
         if (do_dbupdate($sql) == 1)
         {
-            echo "<font color='#00FF00'>Token updated.</font><br>\n";
-            $sql = "update alextreg_extensions set lastedit=NOW(), lasteditauthor='$sqlauthor' where id=$extid";
-            do_dbupdate($sql);
+            update_papertrail("Token '$tokname' revalued to '$newval'", $sql, $extid);
             do_showext($extname);
         } // if
     } // if
