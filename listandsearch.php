@@ -23,7 +23,8 @@ function find_extension($wantname)
         return;  // error output is handled in database.php ...
     else
     {
-        if (($wantname) and (db_num_rows($query) != 1))
+        $count = db_num_rows($query);
+        if (($wantname) and ($count > 1))
             write_error('(Unexpected number of results from database!)');
 
         print("<ul>\n");
@@ -32,7 +33,7 @@ function find_extension($wantname)
             $url = get_alext_wiki_url($row['id']);
             print("  <li><a href='$url'>${row['extname']}</a>\n");
         } // while
-        print("</ul>\n\n");
+        print("</ul>\n<p>Total results: $count\n");
     } // else
 
     db_free_result($query);
@@ -54,7 +55,8 @@ function find_token($additionalsql, $wantname)
         return;  // error output is handled in database.php ...
     else
     {
-        if (($wantname) and (db_num_rows($query) != 1))
+        $count = db_num_rows($query);
+        if (($wantname) and ($count > 1))
             write_error('(Unexpected number of results from database!)');
 
         print("<ul>\n");
@@ -65,7 +67,7 @@ function find_token($additionalsql, $wantname)
             print("  <li>${row['tokenname']} ($hex)");
             print(" from <a href='$url'>${row['extname']}</a>\n");
         } // while
-        print("</ul>\n\n");
+        print("</ul>\n<p>Total results: $count\n");
     } // else
 
     db_free_result($query);
