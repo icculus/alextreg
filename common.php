@@ -22,7 +22,10 @@ function write_debug($dbg)
 
 function get_alext_wiki_url($extname)
 {
-    return("wiki.pl?$extname");  // !!! FIXME
+    $dir = '';
+    if (!empty($_SERVER['REMOTE_USER']))
+        $dir = 'vendor/wiki/';
+    return("${dir}wiki.pl?$extname");  // !!! FIXME
 } // get_alext_wiki_url
 
 ?>
