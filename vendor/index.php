@@ -44,20 +44,22 @@ function op_addtoken()
 
     // see if it's already in the database...
     $sqltokname = db_escape_string($tokname);
-    $sql = "select id from alextreg_tokens where tokenname='$sqltokname'";
+    $sqltokval = db_escape_string($tokval);
+    $sql = "select id from alextreg_tokens where (tokenname='$sqltokname') or (tokenval=$sqltokval)";
     $query = do_dbquery($sql);
     if ($query == false)
         return;  // error output is handled in database.php ...
 
     if (db_num_rows($query) > 0)
     {
-        write_error('This token name is in use. Below is what a search turned up.');
+        write_error('This token name or value is in use. Below is what a search turned up.');
         render_token_list($tokname, $query);
         db_free_result($query);
         return;
     } // if
 
     db_free_result($query);
+
 
     // Just a small sanity check.
     $cookie = $_REQUEST['iamsure'];
