@@ -13,7 +13,7 @@ function get_dblink()
 
     if ($dblink == NULL)
     {
-        $dblink = mysql_connect('localhost', 'alextreg', 'dsfoi9234n');
+        $dblink = mysql_connect('localhost', 'alextreg', 'kjskdjasd923asd');
         if (!$dblink)
         {
             $err = mysql_error();

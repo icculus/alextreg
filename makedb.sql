@@ -31,11 +31,6 @@ REPLACE INTO db (host, db, user, select_priv, insert_priv, update_priv,
 
 FLUSH PRIVILEGES;
 
-# MySQL 3.23.x appears to have "CREATE DATABASE IF NOT EXISTS" and
-# "CREATE TABLE IF NOT EXISTS" which would be a nice way to handle
-# reinstalls gracefully (someday).  For now, use mysql_drop.sql first
-# to avoid CREATE errors.
-
 CREATE DATABASE alextreg;
 
 USE alextreg;
