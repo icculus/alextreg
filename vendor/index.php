@@ -41,7 +41,7 @@ function op_addextension()
 
     // Just a small sanity check.
     $cookie = $_REQUEST['iamsure'];
-    if ((!empty($cookie)) and ($cookie == $_SERVER['REMOTE_ADDR'))
+    if ((!empty($cookie)) and ($cookie == $_SERVER['REMOTE_ADDR']))
     {
 
         $sqlauthor = db_escape_string($_SERVER['REMOTE_USER']);
