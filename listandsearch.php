@@ -22,6 +22,7 @@ function render_extension_list($wantname, $query)
     print("</ul>\n<p>Total results: $count\n");
 } // render_extension_list
 
+
 function render_token_list($wantname, $query)
 {
     $count = db_num_rows($query);

@@ -40,7 +40,7 @@ function op_addtoken()
     if (db_num_rows($query) > 0)
     {
         write_error('This token name or value is in use. Below is what a search turned up.');
-        render_token_list($tokname, $query);
+        render_token_list(false, $query);
         db_free_result($query);
         return;
     } // if
