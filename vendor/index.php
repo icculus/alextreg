@@ -154,7 +154,7 @@ function op_addentrypoint()
         echo "...if you're sure, click 'Confirm'...<br>\n";
         echo "<form>\n";
         echo "<input type='hidden' name='operation' value='op_addentrypoint'>\n";
-        echo "<input type='hidden' name='entname' value='$htmlentname'>\n";
+        echo "<input type='hidden' name='entrypointname' value='$htmlentname'>\n";
         echo "<input type='hidden' name='extid' value='$htmlextid'>\n";
         echo "<input type='hidden' name='iamsure' value='${_SERVER['REMOTE_ADDR']}'>\n";
         echo "<input type='submit' name='form_submit' value='Confirm'>\n";

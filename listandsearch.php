@@ -277,7 +277,7 @@ function show_one_extension($extrow)
     if (is_authorized_vendor())
     {
         echo "  <li>\n<form>\n";
-        echo "Add a new entry point named <input type='text' name='entname'>\n";
+        echo "Add a new entry point named <input type='text' name='entrypointname'>\n";
         echo "<input type='hidden' name='extid' value='$extid'>\n";
         echo "<input type='hidden' name='operation' value='op_addentrypoint'>\n";
         echo "<input type='submit' name='form_submit' value='Go!'>\n";
