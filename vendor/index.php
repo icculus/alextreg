@@ -139,7 +139,7 @@ function op_addentrypoint()
         $sqlextid = db_escape_string($extid);
         // ok, add it to the database.
         $sql = "insert into alextreg_entrypoints" .
-               " (tokenname, tokenval, extid, author, entrydate, lastedit)" .
+               " (entrypointname, extid, author, entrydate, lastedit)" .
                " values ('$sqlentname', $sqlextid, '$sqlauthor', NOW(), NOW())";
         if (do_dbinsert($sql) == 1)
             echo "<font color='#00FF00'>Entry point added.</font><br>\n";
