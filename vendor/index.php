@@ -290,7 +290,7 @@ function op_deltok()
     {
         $htmlextname = htmlentities($extname, ENT_QUOTES);
         $htmltokname = htmlentities($tokname, ENT_QUOTES);
-        echo "About to delete an token named '$htmltokname'<br>\n";
+        echo "About to delete a token named '$htmltokname'<br>\n";
         echo "<b><font size='+1'>\n";
         echo "THERE IS NO UNDELETE. MAKE SURE YOU <u>REALLY</u> WANT TO DO THIS.<br>\n";
         echo "</font></b>\n";
