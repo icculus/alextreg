@@ -33,7 +33,7 @@ EOF;
 } // render_add_ui
 
 
-if (not defined $_SERVER['REMOTE_USER'])
+if (empty($_SERVER['REMOTE_USER']))
     write_error('You need to have basic auth in place here.');
 else
 {
