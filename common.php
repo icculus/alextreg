@@ -22,7 +22,7 @@ function write_debug($dbg)
 
 function get_alext_wiki_url($extname)
 {
-    return("wiki/$extname");  // !!! FIXME
+    return("wiki.pl?$extname");  // !!! FIXME
 } // get_alext_wiki_url
 
 ?>
