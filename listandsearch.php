@@ -155,7 +155,7 @@ function find_entrypoint($wantname)
     if ($query == false)
         return;  // error output is handled in database.php ...
     else
-        render_entrypoint_list($query);
+        render_entrypoint_list($wantname, $query);
 
     db_free_result($query);
 } // find_entrypoint
