@@ -252,6 +252,7 @@ function show_one_extension($extrow)
     if (is_authorized_vendor())
     {
         echo "  <li>\n<form>\n";
+        echo "<b>Vendor:</b>\n";
         echo "Add a new token named <input type='text' name='tokname'>\n";
         echo "with the value <input type='text' name='tokval'>.\n";
         echo "<input type='hidden' name='extid' value='$extid'>\n";
@@ -291,6 +292,7 @@ function show_one_extension($extrow)
     if (is_authorized_vendor())
     {
         echo "  <li>\n<form>\n";
+        echo "<b>Vendor:</b>\n";
         echo "Add a new entry point named <input type='text' name='entrypointname'>\n";
         echo "<input type='hidden' name='extid' value='$extid'>\n";
         echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
