@@ -73,10 +73,10 @@ function op_addtoken()
 
         $hex = '';
         if (sscanf($tokval, "0x%X", &$dummy) != 1)
-            $hex = sprintf("(0x%X hex)", $tokval);  // !!! FIXME: faster way to do this?
+            $hex = sprintf(" (0x%X hex)", $tokval);  // !!! FIXME: faster way to do this?
 
         echo "About to add an extension named $htmlname,<br>\n";
-        echo "with value $htmltokval $hex.<br>\n";
+        echo "with value ${htmltokval}${hex}.<br>\n";
         echo "...if you're sure, click 'Confirm'...<br>\n";
         echo "<form>\n";
         echo "<input type='hidden' name='tokname' value='$htmlname'>\n";
