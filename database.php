@@ -104,6 +104,12 @@ function do_dbupdate($sql, $expected_rows = 1, $link = NULL)
 } // do_dbupdate
 
 
+function do_dbdelete($sql, $expected_rows = 1, $link = NULL)
+{
+    return(do_dbwrite($sql, 'delete', $expected_rows, $link));
+} // do_dbdelete
+
+
 function db_num_rows($query)
 {
     return(mysql_num_rows($query));

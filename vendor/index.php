@@ -62,23 +62,21 @@ function op_addtoken()
     } // if
     else   // put out a confirmation...
     {
-        $htmlextid = htmlentities($extid, ENT_QUOTES);
         $htmlextname = htmlentities($extname, ENT_QUOTES);
         $htmltokname = htmlentities($tokname, ENT_QUOTES);
-        $htmltokval = htmlentities($tokval, ENT_QUOTES);
 
         $hex = '';
         if (sscanf($tokval, "0x%X", &$dummy) != 1)
             $hex = sprintf(" (0x%X hex)", $tokval);  // !!! FIXME: faster way to do this?
 
         echo "About to add a token named '$htmltokname',<br>\n";
-        echo "with value ${htmltokval}${hex}.<br>\n";
+        echo "with value ${tokval}${hex}.<br>\n";
         echo "...if you're sure, click 'Confirm'...<br>\n";
         echo "<form>\n";
         echo "<input type='hidden' name='operation' value='op_addtoken'>\n";
         echo "<input type='hidden' name='tokname' value='$htmltokname'>\n";
-        echo "<input type='hidden' name='tokval' value='$htmltokval'>\n";
-        echo "<input type='hidden' name='extid' value='$htmlextid'>\n";
+        echo "<input type='hidden' name='tokval' value='$tokval'>\n";
+        echo "<input type='hidden' name='extid' value='$extid'>\n";
         echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
         echo "<input type='hidden' name='iamsure' value='${_SERVER['REMOTE_ADDR']}'>\n";
         echo "<input type='submit' name='form_submit' value='Confirm'>\n";
@@ -131,7 +129,6 @@ function op_addentrypoint()
     } // if
     else   // put out a confirmation...
     {
-        $htmlextid= htmlentities($extid, ENT_QUOTES);
         $htmlentname = htmlentities($entname, ENT_QUOTES);
         $htmlextname = htmlentities($extname, ENT_QUOTES);
 
@@ -140,7 +137,7 @@ function op_addentrypoint()
         echo "<form>\n";
         echo "<input type='hidden' name='operation' value='op_addentrypoint'>\n";
         echo "<input type='hidden' name='entrypointname' value='$htmlentname'>\n";
-        echo "<input type='hidden' name='extid' value='$htmlextid'>\n";
+        echo "<input type='hidden' name='extid' value='$extid'>\n";
         echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
         echo "<input type='hidden' name='iamsure' value='${_SERVER['REMOTE_ADDR']}'>\n";
         echo "<input type='submit' name='form_submit' value='Confirm'>\n";
@@ -214,6 +211,50 @@ function op_showhideext()
         echo "<font color='#00FF00'>Extension updated.</font><br>\n";
         do_showext($extname);
     } // if
+} // op_showhideext
+
+
+$operations['op_delext'] = 'op_delext';
+function op_delext()
+{
+    if (!welcome_here()) return;
+    if (!get_input_string('extname', 'extension name', $extname)) return;
+    if (!get_input_int('extid', 'extension id', $extid)) return;
+
+    // Just a small sanity check.
+    $cookie = $_REQUEST['iamsure'];
+    if ((!empty($cookie)) and ($cookie == $_SERVER['REMOTE_ADDR']))
+    {
+        $sqlauthor = db_escape_string($_SERVER['REMOTE_USER']);
+        // ok, nuke it.
+        $sql = "delete from alextreg_extensions where id=$extid";
+        if (do_dbdelete($sql) == 1)
+        {
+            echo "<font color='#00FF00'>EXTENSION DELETED!</font><br>\n";
+            $sql = "delete from alextreg_tokens where extid=$extid";
+            $rc = do_dbdelete($sql, -1);
+            echo "<font color='#00FF00'>DELETED $rc TOKENS!</font><br>\n";
+            $sql = "delete from alextreg_entrypoints where extid=$extid";
+            $rc = do_dbdelete($sql, -1);
+            echo "<font color='#00FF00'>DELETED $rc ENTRY POINTS!</font><br>\n";
+        } // if
+    } // if
+    else   // put out a confirmation...
+    {
+        $htmlextname = htmlentities($extname, ENT_QUOTES);
+        echo "About to delete an extension named '$htmlextname'<br>\n";
+        echo "<b><font size="+1">\n"
+        echo "THERE IS NO UNDELETE. MAKE SURE YOU REALLY WANT TO DO THIS.<br>\n";
+        echo "</font></b>\n"
+        echo "...if you're sure, click 'Confirm'...<br>\n";
+        echo "<form>\n";
+        echo "<input type='hidden' name='extid' value='$extid'>\n";
+        echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
+        echo "<input type='hidden' name='operation' value='op_delext'>\n";
+        echo "<input type='hidden' name='iamsure' value='${_SERVER['REMOTE_ADDR']}'>\n";
+        echo "<input type='submit' name='form_submit' value='Confirm'>\n";
+        echo "</form>\n";
+    } // else
 } // op_showhideext
 
 
