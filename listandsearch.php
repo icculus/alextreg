@@ -244,7 +244,7 @@ function show_one_extension($extrow)
            ' left outer join alextreg_extensions as ext' .
            ' on tok.extid=ext.id';
 
-    if (!is_vendor)
+    if (!$is_vendor)
         $sql .= " and (ext.public=1)";
 
     $query = do_dbquery($sql);
@@ -265,7 +265,7 @@ function show_one_extension($extrow)
     } // else
     db_free_result($query);
 
-    if (is_vendor)
+    if ($is_vendor)
     {
         echo "  <li>\n<form>\n";
         echo "<b>Vendor:</b>\n";
@@ -285,7 +285,7 @@ function show_one_extension($extrow)
            ' left outer join alextreg_extensions as ext' .
            ' on ent.extid=ext.id';
 
-    if (!is_vendor)
+    if (!$is_vendor)
         $sql .= " and (ext.public=1)";
 
     $query = do_dbquery($sql);
@@ -305,7 +305,7 @@ function show_one_extension($extrow)
     } // else
     db_free_result($query);
 
-    if (is_vendor)
+    if ($is_vendor)
     {
         echo "  <li>\n<form>\n";
         echo "<b>Vendor:</b>\n";
