@@ -202,11 +202,11 @@ $operations['op_addextension'] = 'op_addextension';
 function op_addextension()
 {
     if (!welcome_here()) return;
-    if (!get_input_string('wantname', 'extension name', $wantname)) return;
+    if (!get_input_string('extname', 'extension name', $extname)) return;
 
     // see if it's already in the database...
-    $sqlwantname = db_escape_string($wantname);
-    $sql = "select * from alextreg_extensions where extname='$sqlwantname'";
+    $sqlextname = db_escape_string($extname);
+    $sql = "select * from alextreg_extensions where extname='$sqlextname'";
     $query = do_dbquery($sql);
     if ($query == false)
         return;  // error output is handled in database.php ...
@@ -214,7 +214,7 @@ function op_addextension()
     if (db_num_rows($query) > 0)
     {
         write_error('This extension name is in use. Below is what a search turned up.');
-        render_extension_list($wantname, $query);
+        render_extension_list($extname, $query);
         db_free_result($query);
         return;
     } // if
@@ -229,21 +229,21 @@ function op_addextension()
         // ok, add it to the database.
         $sql = "insert into alextreg_extensions" .
                " (extname, public, author, entrydate, lasteditauthor, lastedit)" .
-               " values ('$sqlwantname', 0, '$sqlauthor', NOW(), '$sqlauthor', NOW())";
+               " values ('$sqlextname', 0, '$sqlauthor', NOW(), '$sqlauthor', NOW())";
         if (do_dbinsert($sql) == 1)
         {
             update_papertrail("Extension '$extname' added", $sql, NULL);
-            do_showext($wantname);
+            do_showext($extname);
         } // if
     } // if
     else   // put out a confirmation...
     {
-        $htmlname = htmlentities($wantname, ENT_QUOTES);
+        $htmlname = htmlentities($extname, ENT_QUOTES);
         echo "About to add an extension named '$htmlname'.<br>\n";
         echo "You can add tokens and entry points to this extension in a moment.<br>\n";
         echo "...if you're sure, click 'Confirm'...<br>\n";
         echo "<form>\n";
-        echo "<input type='hidden' name='wantname' value='$htmlname'>\n";
+        echo "<input type='hidden' name='extname' value='$htmlname'>\n";
         echo "<input type='hidden' name='operation' value='op_addextension'>\n";
         echo "<input type='hidden' name='iamsure' value='${_SERVER['REMOTE_ADDR']}'>\n";
         echo "<input type='submit' name='form_submit' value='Confirm'>\n";
@@ -648,7 +648,7 @@ function render_add_ui()
 <form action="${_SERVER['PHP_SELF']}">
   <b>Vendor:</b>
   I want to add a new extension
-  named <input type="text" name="wantname" value="">.
+  named <input type="text" name="extname" value="">.
   <input type="hidden" name="operation" value="op_addextension">
   <input type="submit" name="form_submit" value="Go!">
 </form>
