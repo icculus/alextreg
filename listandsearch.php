@@ -219,7 +219,7 @@ function show_one_extension($extrow)
     if ((!$public) and (!$is_vendor))  // sanity check.
         return;
 
-    echo "<p><font size='+1'><u>$htmlextname</u></font>\n";
+    echo "<p><h1><u>$htmlextname</u></h1>\n";
     echo "<p>&nbsp;&nbsp;<a href='${wikiurl}'>Click here for documentation and discussion.</a>\n";
 
     $tab = '&nbsp;&nbsp;&nbsp;&nbsp;';
