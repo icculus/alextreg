@@ -86,7 +86,7 @@ function op_addtoken()
     $sql = 'select tok.*, ext.extname from alextreg_tokens as tok' .
            ' left outer join alextreg_extensions as ext' .
            ' on tok.extid=ext.id' .
-           " where (tok.tokenname='$sqltokname') or (tok.tokenval=$tokval)";
+           " where (tok.tokenname='$sqltokname')";
 
     $query = do_dbquery($sql);
     if ($query == false)
@@ -94,10 +94,26 @@ function op_addtoken()
 
     if (db_num_rows($query) > 0)
     {
-        write_error('This token name or value is in use. Below is what a search turned up.');
-        render_token_list(false, $query);
+        write_error('This token name is in use. Below is what a search turned up.');
+        render_token_list($tokname, $query);
         db_free_result($query);
         return;
+    } // if
+
+    db_free_result($query);
+
+    $sql = 'select tok.*, ext.extname from alextreg_tokens as tok' .
+           ' left outer join alextreg_extensions as ext' .
+           ' on tok.extid=ext.id' .
+           " where (tok.tokenval=$tokval)";
+    $query = do_dbquery($sql);
+    if ($query == false)
+        return;  // error output is handled in database.php ...
+
+    if (db_num_rows($query) > 0)
+    {
+        write_error('Please note that this token value is in use, which may be okay. Below is what a search turned up.');
+        render_token_list(false, $query);
     } // if
 
     db_free_result($query);
@@ -161,7 +177,7 @@ function op_addentrypoint()
     if (db_num_rows($query) > 0)
     {
         write_error('This entry point is in use. Below is what a search turned up.');
-        render_entrypoint_list($tokname, $query);
+        render_entrypoint_list($entname, $query);
         db_free_result($query);
         return;
     } // if
@@ -419,11 +435,26 @@ function op_renameext()
     if (!get_input_string('extname', 'extension name', $extname)) return;
     if (!get_input_int('extid', 'extension id', $extid)) return;
 
+    $sqlnewval = db_escape_string($newval);
+    $sql = "select * from alextreg_extensions where extname='$sqlnewval'";
+    $query = do_dbquery($sql);
+    if ($query == false)
+        return;  // error output is handled in database.php ...
+
+    if (db_num_rows($query) > 0)
+    {
+        write_error('The new extension name is in use. Below is what a search turned up.');
+        render_extension_list($extname, $query);
+        db_free_result($query);
+        return;
+    } // if
+
+    db_free_result($query);
+
     // Just a small sanity check.
     $cookie = $_REQUEST['iamsure'];
     if ((!empty($cookie)) and ($cookie == $_SERVER['REMOTE_ADDR']))
     {
-        $sqlnewval = db_escape_string($newval);
         $sqlauthor = db_escape_string($_SERVER['REMOTE_USER']);
         // ok, nuke it.
         $sql = "update alextreg_extensions set extname='$sqlnewval'," .
@@ -604,10 +635,8 @@ function op_revaluetok()
 
     if (db_num_rows($query) > 0)
     {
-        write_error('The new token value is in use. Below is what a search turned up.');
-        render_token_list($tokname, $query);
-        db_free_result($query);
-        return;
+        write_error('Please note the new token value is in use, which may be okay. Below is what a search turned up.');
+        render_token_list(false, $query);
     } // if
     db_free_result($query);
 
