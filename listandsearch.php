@@ -236,9 +236,9 @@ function show_one_extension($extrow)
         $is_public = ($extflags & $extflags_public);
         $toggle = (($is_public) ? 0 : 1);
         $is = ($is_public) ? 'is' : 'is not';
-        echo "<p><b>Vendor:</b>\n";
+        echo "<p><form>\n";
+        echo "<b>Vendor:</b>\n";
         echo "This extension $is publically visible.\n";
-        echo "<form>\n";
         echo "<input type='hidden' name='extid' value='$extid'>\n";
         echo "<input type='hidden' name='newval' value='$toggle'>\n";
         echo "<input type='hidden' name='operation' value='op_showhideext'>\n";
