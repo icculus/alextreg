@@ -15,7 +15,7 @@ function write_debug($dbg)
     if ($disable_debug)
         return;
 
-    echo "<p><center><font color='#00FF00'>";
+    echo "<p><center><font color='#0000FF'>";
     echo   "DEBUG: $dbg<br>";
     echo "</font></center>\n";
 } // write_debug
