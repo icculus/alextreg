@@ -76,7 +76,7 @@ function op_addtoken()
         if (sscanf($tokval, "0x%X", &$dummy) != 1)
             $hex = sprintf(" (0x%X hex)", $tokval);  // !!! FIXME: faster way to do this?
 
-        echo "About to add a token named '$htmlname',<br>\n";
+        echo "About to add a token named '$htmltokname',<br>\n";
         echo "with value ${htmltokval}${hex}.<br>\n";
         echo "...if you're sure, click 'Confirm'...<br>\n";
         echo "<form>\n";
