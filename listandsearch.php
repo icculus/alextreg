@@ -236,7 +236,7 @@ function show_one_extension($extrow)
     if (is_authorized_vendor())
     {
         echo "  <li>\n<form>\n";
-        echo "Add a new token named <input type='text' name='wantname'>\n";
+        echo "Add a new token named <input type='text' name='tokname'>\n";
         echo "with the value <input type='text' name='tokval'>.\n";
         echo "<input type='hidden' name='extid' value='$extid'>\n";
         echo "<input type='hidden' name='operation' value='op_addtoken'>\n";
