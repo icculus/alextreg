@@ -10,21 +10,15 @@ function do_operation()
 {
     global $operations;
 
-    $op = $_POST['operation'];
+    $op = $_REQUEST['operation'];
     if (empty($op))
         return;  // nothing to do.
 
-    // check for registered operation handlers...
-    foreach ($operations as $key => $value)
-    {
-        if (strcasecmp($key, $op) == 0)  // operation to handle.
-        {
-            $value();  // call the handler...
-            return;    //  ...then get the hell out.
-        } // if
-    } // foreach
-
-   echo "<p><center><font color='#FF0000'>Unexpected operation?!</font></center>\n";
+    $func = $operations[$op];
+    if (empty($func))
+        echo "<p><center><font color='#FF0000'>Bad operation</font></center>\n";
+    else
+        $func();  // make the call.
 } // do_operation
 
 ?>
