@@ -86,7 +86,7 @@ function update_vendor_login($loginname, $pw, $allowreplace)
     } // if
 
     $cmd = escapeshellcmd("htpasswd -b -n $loginname $pw");
-    $cryptedpw = system($cmd);
+    $cryptedpw = @system($cmd);
     if ($cryptedpw == false)
     {
         write_error("Can't crypt password");
@@ -132,8 +132,8 @@ function update_vendor_login($loginname, $pw, $allowreplace)
     } // for
 
     // add in new or updated login.
-    fputs($io, "${loginname}:${cryptedpw}\n");
-    update_papertrail("$action login for vendor '$loginname'", '', NULL);
+    fputs($io, "${cryptedpw}\n");
+    //update_papertrail("$action login for vendor '$loginname'", '', NULL);
 } // update_vendor_login
 
 
