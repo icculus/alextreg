@@ -1,5 +1,5 @@
 <Files *>
-  AuthUserFile ../.htpasswd
+  AuthUserFile /webspace/projects/alextreg/vendor/.htpasswd
   AuthName "OpenAL Vendor Login"
   AuthType Basic
   Require valid-user
