@@ -1,6 +1,6 @@
 <?php
 
-$enable_debug = (isset($_REQUEST['debug']));
+$enable_debug = (!empty($_REQUEST['debug']));
 
 function is_authorized_vendor()
 {
@@ -66,7 +66,7 @@ function get_input_sanitized($reqname, $reqtype, &$reqval)
     $reqval = trim($val);
     if ($reqval == '')
     {
-        write_error("$reqtype is blank");
+        write_error("$reqtype is blank: Please fill out all fields.");
         return false;
     } // if
 

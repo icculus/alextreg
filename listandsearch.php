@@ -193,16 +193,9 @@ function do_find($wanttype, $wantname = NULL)
 $operations['op_findone'] = 'op_findone';
 function op_findone()
 {
-    $wanttype = $_REQUEST['wanttype'];
-    $wantname = $_REQUEST['wantname'];
+    if (!get_input_string('wanttype', 'Database field type', $wanttype)) return;
+    if (!get_input_string('wantname', 'Database field name', $wantname)) return;
     write_debug("called op_findone($wanttype, $wantname)");
-
-    if ( (empty($wantname)) or (empty($wanttype)) )
-    {
-        write_error('Please fill out all fields.');
-        return;
-    } // if
-
     do_find($wanttype, $wantname);
 } // op_findone
 
@@ -326,7 +319,7 @@ function show_one_extension($extrow)
 $operations['op_findall'] = 'op_findall';
 function op_findall()
 {
-    $wanttype = $_REQUEST['wanttype'];
+    if (!get_input_string('wanttype', 'Database field type', $wanttype)) return;
     write_debug("called op_findall($wanttype)");
     do_find($wanttype);
 } // op_findall
@@ -360,13 +353,7 @@ function do_showext($extname)
 $operations['op_showext'] = 'op_showext';
 function op_showext()
 {
-    $extname = $_REQUEST['extname'];
-    if (empty($extname))
-    {
-        write_error('No extension specified.');
-        return;
-    } // if
-
+    if (!get_input_string('extname', 'extension name', $extname)) return;
     do_showext($extname);
 } // op_showext
 

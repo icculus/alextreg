@@ -20,41 +20,15 @@ function welcome_here()
 $operations['op_addtoken'] = 'op_addtoken';
 function op_addtoken()
 {
-    if (!welcome_here())
-        return;
-
-    $tokname = $_REQUEST['tokname'];
-    if (empty($tokname))
-    {
-        write_error('No token name specified.');
-        return;
-    } // if
-
-    $extid = $_REQUEST['extid'];
-    if (empty($extid))
-    {
-        write_error('No extension id specified.');
-        return;
-    } // if
-
-    $extname = $_REQUEST['extname'];
-    if (empty($extname))
-    {
-        write_error('No extension name specified.');
-        return;
-    } // if
-
-    $tokval = $_REQUEST['tokval'];
-    if (empty($tokval))
-    {
-        write_error('No token value specified.');
-        return;
-    } // if
+    if (!welcome_here()) return;
+    if (!get_input_string('tokname', 'token name', $tokname)) return;
+    if (!get_input_string('extname', 'extension name', $extname)) return;
+    if (!get_input_int('extid', 'extension id', $extid)) return;
+    if (!get_input_int('tokval', 'token value', $tokval)) return;
 
     // see if it's already in the database...
     $sqltokname = db_escape_string($tokname);
-    $sqltokval = db_escape_string($tokval);
-    $sql = "select * from alextreg_tokens where (tokenname='$sqltokname') or (tokenval=$sqltokval)";
+    $sql = "select * from alextreg_tokens where (tokenname='$sqltokname') or (tokenval=$tokval)";
     $query = do_dbquery($sql);
     if ($query == false)
         return;  // error output is handled in database.php ...
@@ -69,22 +43,19 @@ function op_addtoken()
 
     db_free_result($query);
 
-
     // Just a small sanity check.
     $cookie = $_REQUEST['iamsure'];
     if ((!empty($cookie)) and ($cookie == $_SERVER['REMOTE_ADDR']))
     {
         $sqlauthor = db_escape_string($_SERVER['REMOTE_USER']);
-        $sqltokval = db_escape_string($tokval);
-        $sqlextid = db_escape_string($extid);
         // ok, add it to the database.
         $sql = "insert into alextreg_tokens" .  // !!! FIXME: Should have author associated with it!
                " (tokenname, tokenval, extid, author, entrydate, lastedit)" .
-               " values ('$sqltokname', $sqltokval, $sqlextid, '$sqlauthor', NOW(), NOW())";
+               " values ('$sqltokname', $tokval, $extid, '$sqlauthor', NOW(), NOW())";
         if (do_dbinsert($sql) == 1)
         {
             echo "<font color='#00FF00'>Token added.</font><br>\n";
-            $sql = "update alextreg_extensions set lastedit=NOW() where id=$sqlextid";
+            $sql = "update alextreg_extensions set lastedit=NOW() where id=$extid";
             do_dbupdate($sql);
             do_showext($extname);
         } // if
@@ -119,29 +90,10 @@ function op_addtoken()
 $operations['op_addentrypoint'] = 'op_addentrypoint';
 function op_addentrypoint()
 {
-    if (!welcome_here())
-        return;
-
-    $entname = $_REQUEST['entrypointname'];
-    if (empty($entname))
-    {
-        write_error('No entry point name specified.');
-        return;
-    } // if
-
-    $extid = $_REQUEST['extid'];
-    if (empty($extid))
-    {
-        write_error('No extension id specified.');
-        return;
-    } // if
-
-    $extname = $_REQUEST['extname'];
-    if (empty($extname))
-    {
-        write_error('No extension name specified.');
-        return;
-    } // if
+    if (!welcome_here()) return;
+    if (!get_input_string('entrypointname', 'entry point name', $entname)) return;
+    if (!get_input_string('extname', 'extension name', $extname)) return;
+    if (!get_input_int('extid', 'extension id', $extid)) return;
 
     // see if it's already in the database...
     $sqlentname = db_escape_string($entname);
@@ -165,15 +117,14 @@ function op_addentrypoint()
     if ((!empty($cookie)) and ($cookie == $_SERVER['REMOTE_ADDR']))
     {
         $sqlauthor = db_escape_string($_SERVER['REMOTE_USER']);
-        $sqlextid = db_escape_string($extid);
         // ok, add it to the database.
         $sql = "insert into alextreg_entrypoints" .
                " (entrypointname, extid, author, entrydate, lastedit)" .
-               " values ('$sqlentname', $sqlextid, '$sqlauthor', NOW(), NOW())";
+               " values ('$sqlentname', $extid, '$sqlauthor', NOW(), NOW())";
         if (do_dbinsert($sql) == 1)
         {
             echo "<font color='#00FF00'>Entry point added.</font><br>\n";
-            $sql = "update alextreg_extensions set lastedit=NOW() where id=$sqlextid";
+            $sql = "update alextreg_extensions set lastedit=NOW() where id=$extid";
             do_dbupdate($sql);
             do_showext($extname);
         } // if
@@ -201,15 +152,8 @@ function op_addentrypoint()
 $operations['op_addextension'] = 'op_addextension';
 function op_addextension()
 {
-    if (!welcome_here())
-        return;
-
-    $wantname = $_REQUEST['wantname'];
-    if (empty($wantname))
-    {
-        write_error('No extension name specified.');
-        return;
-    } // if
+    if (!welcome_here()) return;
+    if (!get_input_string('wantname', 'extension name', $wantname)) return;
 
     // see if it's already in the database...
     $sqlwantname = db_escape_string($wantname);
@@ -259,34 +203,12 @@ function op_addextension()
 $operations['op_showhideext'] = 'op_showhideext';
 function op_showhideext()
 {
-    if (!welcome_here())
-        return;
+    if (!welcome_here()) return;
+    if (!get_input_string('extname', 'extension name', $extname)) return;
+    if (!get_input_int('extid', 'extension id', $extid)) return;
+    if (!get_input_bool('newval', 'toggle value', $newval)) return;
 
-    $newval = $_REQUEST['newval'];
-    if (empty($newval))
-    {
-        write_error('No toggle value specified.');
-        return;
-    } // if
-    $newval = ($newval == 'y') ? 1 : 0;
-
-    $extid = $_REQUEST['extid'];
-    if (empty($extid))
-    {
-        write_error('No extension specified.');
-        return;
-    } // if
-
-    $extname = $_REQUEST['extname'];
-    if (empty($extname))
-    {
-        write_error('No extension name specified.');
-        return;
-    } // if
-
-    $sqlnewval = db_escape_string($newval);
-    $sqlextid = db_escape_string($extid);
-    $sql = "update alextreg_extensions set public=$sqlnewval, lastedit=NOW() where id=$sqlextid";
+    $sql = "update alextreg_extensions set public=$newval, lastedit=NOW() where id=$extid";
     if (do_dbupdate($sql) == 1)
     {
         echo "<font color='#00FF00'>Extension updated.</font><br>\n";
