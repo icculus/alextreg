@@ -5,6 +5,14 @@
 
 require_once 'common.php';
 
+// This should have the following lines, minus comments:
+//
+//  $dbuser = 'username';
+//  $dbpass = 'password';
+//
+// Obviously, those should be a real username and password for the database.
+require_once 'dbpasswd.php';
+
 $dblink = NULL;
 
 function get_dblink()
@@ -13,7 +21,8 @@ function get_dblink()
 
     if ($dblink == NULL)
     {
-        $dblink = mysql_connect('localhost', 'alextreg', 'kjskdjasd923asd');
+        global $dbuser, $dbpass;
+        $dblink = mysql_connect('localhost', $dbuser, $dbpass);
         if (!$dblink)
         {
             $err = mysql_error();
