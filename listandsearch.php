@@ -64,7 +64,7 @@ function find_extension($wantname)
            ' where (1=1)';
 
     if (!is_authorized_vendor())
-        $sql .= ' and (flags & $extflags_public)';
+        $sql .= " and (flags & $extflags_public)";
 
     if ($wantname)
     {
@@ -93,7 +93,7 @@ function find_token($additionalsql, $wantname)
            $additionalsql;
 
     if (!is_authorized_vendor())
-        $sql .= ' and (ext.flags & $extflags_public)';
+        $sql .= " and (ext.flags & $extflags_public)";
 
     $query = do_dbquery($sql);
     if ($query == false)
@@ -143,7 +143,7 @@ function find_entrypoint($wantname)
            ' on ent.extid=ext.id where (1=1)';
 
     if (!is_authorized_vendor())
-        $sql .= ' and (ext.flags & $extflags_public)';
+        $sql .= " and (ext.flags & $extflags_public)";
 
     if ($wantname)
     {
@@ -219,7 +219,7 @@ function show_one_extension($extrow)
            ' on tok.extid=ext.id';
 
     if (!is_authorized_vendor())
-        $sql .= ' where (ext.flags & $extflags_public)';
+        $sql .= " where (ext.flags & $extflags_public)";
 
     $query = do_dbquery($sql);
     if ($query == false)
@@ -259,7 +259,7 @@ function show_one_extension($extrow)
            ' on ent.extid=ext.id';
 
     if (!is_authorized_vendor())
-        $sql .= ' where (ext.flags & $extflags_public)';
+        $sql .= " where (ext.flags & $extflags_public)";
 
     $query = do_dbquery($sql);
     if ($query == false)
@@ -311,7 +311,7 @@ function do_showext($extname)
            " where extname='$sqlextname'";
 
     if (!is_authorized_vendor())
-        $sql .= ' and (flags & $extflags_public)';
+        $sql .= " and (flags & $extflags_public)";
 
     $query = do_dbquery($sql);
     if ($query == false)
