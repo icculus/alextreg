@@ -149,8 +149,7 @@ function op_addentrypoint()
         $htmlextid= htmlentities($extid, ENT_QUOTES);
         $htmlentname = htmlentities($entname, ENT_QUOTES);
 
-        echo "About to add an entry point named $htmlname,<br>\n";
-        echo "with value ${htmltokval}${hex}.<br>\n";
+        echo "About to add an entry point named $htmlentname,<br>\n";
         echo "...if you're sure, click 'Confirm'...<br>\n";
         echo "<form>\n";
         echo "<input type='hidden' name='operation' value='op_addentrypoint'>\n";
