@@ -61,6 +61,7 @@ function op_addextension()
         echo "<input type='hidden' name='operation' value='op_addextension'>\n";
         echo "<input type='hidden' name='iamsure' value='${_SERVER['REMOTE_ADDR']}'>\n";
         echo "<input type='submit' name='form_submit' value='Confirm'>\n";
+        echo "</form>\n";
     } // else
 } // op_addextension
 
