@@ -1,6 +1,6 @@
 <?php
 
-$disable_debug = ($_REQUEST['debug'] == '1');
+$enable_debug = (isset($_REQUEST['debug']));
 
 $extflags_public = (1 << 0);
 
@@ -18,13 +18,13 @@ function write_error($err)
 
 function write_debug($dbg)
 {
-    global $disable_debug;
-    if ($disable_debug)
-        return;
-
-    echo "<p><center><font color='#0000FF'>";
-    echo   "DEBUG: $dbg<br>";
-    echo "</font></center>\n";
+    global $enable_debug;
+    if ($enable_debug)
+    {
+        echo "<p><center><font color='#0000FF'>";
+        echo   "DEBUG: $dbg<br>";
+        echo "</font></center>\n";
+    } // if
 } // write_debug
 
 
