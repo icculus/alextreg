@@ -218,9 +218,12 @@ function show_one_extension($extrow)
 
     if ($is_vendor)
     {
+        echo "<p><b>Vendor:</b>\n";
+        echo "<ul>\n";
+
         $toggle = (($public) ? 'n' : 'y');
         $is = ($public) ? 'is' : 'is not';
-        echo "<p><form>\n";
+        echo "<li><form>\n";
         echo "<b>Vendor:</b>\n";
         echo "This extension $is publically visible.\n";
         echo "<input type='hidden' name='extid' value='$extid'>\n";
@@ -229,6 +232,25 @@ function show_one_extension($extrow)
         echo "<input type='hidden' name='operation' value='op_showhideext'>\n";
         echo "<input type='submit' name='form_submit' value='Toggle'>\n";
         echo "</form>\n";
+
+        echo "<li><form>\n";
+        echo "Add a new token named <input type='text' name='tokname'>\n";
+        echo "with the value <input type='text' name='tokval'>.\n";
+        echo "<input type='hidden' name='extid' value='$extid'>\n";
+        echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
+        echo "<input type='hidden' name='operation' value='op_addtoken'>\n";
+        echo "<input type='submit' name='form_submit' value='Go!'>\n";
+        echo "</form>\n";
+
+        echo "<li><form>\n";
+        echo "Add a new entry point named <input type='text' name='entrypointname'>\n";
+        echo "<input type='hidden' name='extid' value='$extid'>\n";
+        echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
+        echo "<input type='hidden' name='operation' value='op_addentrypoint'>\n";
+        echo "<input type='submit' name='form_submit' value='Go!'>\n";
+        echo "</form>\n";
+
+        echo "</ul>\n";
     } // if
 
     echo "<p>Tokens:\n<ul>\n";
@@ -258,19 +280,6 @@ function show_one_extension($extrow)
     } // else
     db_free_result($query);
 
-    if ($is_vendor)
-    {
-        echo "  <li>\n<form>\n";
-        echo "<b>Vendor:</b>\n";
-        echo "Add a new token named <input type='text' name='tokname'>\n";
-        echo "with the value <input type='text' name='tokval'>.\n";
-        echo "<input type='hidden' name='extid' value='$extid'>\n";
-        echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
-        echo "<input type='hidden' name='operation' value='op_addtoken'>\n";
-        echo "<input type='submit' name='form_submit' value='Go!'>\n";
-        echo "</form>\n";
-    } // if
-
     echo "</ul>\n";
 
     echo "<p>Entry points:\n<ul>\n";
@@ -297,18 +306,6 @@ function show_one_extension($extrow)
         } // while
     } // else
     db_free_result($query);
-
-    if ($is_vendor)
-    {
-        echo "  <li>\n<form>\n";
-        echo "<b>Vendor:</b>\n";
-        echo "Add a new entry point named <input type='text' name='entrypointname'>\n";
-        echo "<input type='hidden' name='extid' value='$extid'>\n";
-        echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
-        echo "<input type='hidden' name='operation' value='op_addentrypoint'>\n";
-        echo "<input type='submit' name='form_submit' value='Go!'>\n";
-        echo "</form>\n";
-    } // if
 
     echo "</ul>\n";
 
