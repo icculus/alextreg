@@ -569,6 +569,9 @@ function op_revaluetok()
         $htmlnewval = htmlentities($newval, ENT_QUOTES);
         $htmlextname = htmlentities($extname, ENT_QUOTES);
         $htmltokname = htmlentities($tokname, ENT_QUOTES);
+        $hex = '';
+        if (sscanf($newval, "0x%X", &$dummy) != 1)
+            $hex = sprintf(" (0x%X hex)", $newval);  // !!! FIXME: faster way to do this?
         echo "About to change the value of a token named '$htmltokname' to ${newval}${hex}.<br>\n";
         echo "...if you're sure, click 'Confirm'...<br>\n";
         echo "<form>\n";
