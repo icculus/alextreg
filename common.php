@@ -49,7 +49,7 @@ function get_alext_wiki_url($extname)
 function get_alext_url($extname)
 {
     $htmlextname = htmlentities($extname, ENT_QUOTES);
-    return("${_SERVER['PHP_SELF']}?operation=showext&extname=${htmlextname}");
+    return("${_SERVER['PHP_SELF']}?operation=op_showext&extname=${htmlextname}");
 } // get_alext_url
 
 ?>
