@@ -62,7 +62,7 @@ $queryfuncs['extension'] = 'find_extension';
 function find_extension($wantname)
 {
     $sql = 'select extname from alextreg_extensions' .
-           ' where (1=1)';
+           ' order by extname where (1=1)';
 
     if (!is_authorized_vendor())
         $sql .= " and (public=1)";
@@ -95,6 +95,8 @@ function find_token($additionalsql, $wantname)
 
     if (!is_authorized_vendor())
         $sql .= " and (ext.public=1)";
+
+    $sql .= ' order by tok.tokenname';
 
     $query = do_dbquery($sql);
     if ($query == false)
@@ -153,6 +155,8 @@ function find_entrypoint($wantname)
         $sqlwantname = db_escape_string($wantname);
         $sql .= " and (ent.entrypointname='$sqlwantname')";
     } // if
+
+    $sql .= ' order by ent.entrypointname';
 
     $query = do_dbquery($sql);
     if ($query == false)
@@ -232,6 +236,9 @@ function show_one_extension($extrow)
     if (!$is_vendor)
         $sql .= ' and (ext.public=1)';
 
+    // !!! FIXME: Harder to find what you want, but the numbers are in order...
+    $sql .= ' order by tok.tokenval';
+
     $query = do_dbquery($sql);
     if ($query == false)
         return;  // uh...?
@@ -246,6 +253,8 @@ function show_one_extension($extrow)
 
     if (!$is_vendor)
         $sql .= ' and (ext.public=1)';
+
+    $sql .= ' order by ent.entrypointname';
 
     $query = do_dbquery($sql);
     if ($query == false)
