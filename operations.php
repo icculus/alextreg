@@ -8,6 +8,8 @@ $operations = array();
 
 function do_operation()
 {
+    global $operations;
+
     $op = $_POST['operation'];
     if (empty($op))
         return;  // nothing to do.
