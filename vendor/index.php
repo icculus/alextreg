@@ -72,6 +72,45 @@ function op_renderpapertrail()
 } // op_renderpapertrail
 
 
+$operations['op_confirmpw'] = 'op_confirmpw';
+function op_confirmpw()
+{
+    if (!welcome_here()) return;
+    if (!get_input_string('pw1', 'new password', $pw1)) return;
+    if (!get_input_string('pw2', 'retyped password', $pw2)) return;
+
+    if (pw1 != pw2)
+    {
+        write_error("passwords don't match");
+        return;
+    } // if
+
+    write_error("change the password to '$pw1', fool.");
+} // op_confirmpw
+
+
+$operations['op_changepw'] = 'op_changepw';
+function op_changepw()
+{
+    if (!welcome_here()) return;
+
+    $form = get_form_tag();
+
+    echo <<< EOF
+    <h1><u>Changing password for ${_SERVER['REMOTE_USER']}</u></h1>
+
+    <p>
+    ${form}
+    New password: <input type='password' name='pw1' value=''><br>
+    Retype new password: <input type='password' name='pw2' value=''><br>
+    <input type='hidden' name='operation' value='op_confirmpw'>
+    <input type='submit' name='form_submit' value='Change'>
+    </form>
+
+EOF;
+} // op_changepw
+
+
 $operations['op_addtoken'] = 'op_addtoken';
 function op_addtoken()
 {
