@@ -5,14 +5,23 @@ require_once '../operations.php';
 require_once '../headerandfooter.php';
 require_once '../listandsearch.php';
 
-$operations['op_addtoken'] = 'op_addtoken';
-function op_addtoken()
+function welcome_here()
 {
     if (!is_authorized_vendor())
     {
+        // This means you don't have Basic Auth in place, probably.
         write_error("You shouldn't be here!");
-        return;
+        return false;
     } // if
+
+    return true;
+} // welcome_here
+
+$operations['op_addtoken'] = 'op_addtoken';
+function op_addtoken()
+{
+    if (!welcome_here())
+        return;
 
     $tokname = $_REQUEST['tokname'];
     if (empty($tokname))
@@ -110,11 +119,8 @@ function op_addtoken()
 $operations['op_addentrypoint'] = 'op_addentrypoint';
 function op_addentrypoint()
 {
-    if (!is_authorized_vendor())
-    {
-        write_error("You shouldn't be here!");
+    if (!welcome_here())
         return;
-    } // if
 
     $entname = $_REQUEST['entrypointname'];
     if (empty($entname))
@@ -195,11 +201,8 @@ function op_addentrypoint()
 $operations['op_addextension'] = 'op_addextension';
 function op_addextension()
 {
-    if (!is_authorized_vendor())
-    {
-        write_error("You shouldn't be here!");
+    if (!welcome_here())
         return;
-    } // if
 
     $wantname = $_REQUEST['wantname'];
     if (empty($wantname))
@@ -256,11 +259,8 @@ function op_addextension()
 $operations['op_showhideext'] = 'op_showhideext';
 function op_showhideext()
 {
-    if (!is_authorized_vendor())
-    {
-        write_error("You shouldn't be here!");
+    if (!welcome_here())
         return;
-    } // if
 
     $newval = $_REQUEST['newval'];
     if (empty($newval))
@@ -315,9 +315,7 @@ EOF;
 } // render_add_ui
 
 
-if (!is_authorized_vendor())
-    write_error('You need to have basic auth in place here.');
-else
+if (welcome_here())
 {
     render_header();
     if (do_operation())
