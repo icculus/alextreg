@@ -72,7 +72,7 @@ function op_renderpapertrail()
 } // op_renderpapertrail
 
 
-function update_vendor_login($loginname, $pw);
+function update_vendor_login($loginname, $pw)
 {
     $action = 'Added';
     $users = file("./.htpasswd");
