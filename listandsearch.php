@@ -88,7 +88,7 @@ function find_tokenname($wantname)
 } // find_tokenname
 
 
-$queryfuncs['tokenval'] = 'find_tokenvalue';
+$queryfuncs['tokenvalue'] = 'find_tokenvalue';
 function find_tokenvalue($wantname)
 {
     $additionalsql = '';
