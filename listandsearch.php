@@ -237,8 +237,7 @@ function show_one_extension($extrow)
     if (!$is_vendor)
         $sql .= ' and (ext.public=1)';
 
-    // !!! FIXME: Harder to find what you want, but the numbers are in order...
-    $sql .= ' order by tok.tokenval';
+    $sql .= ' order by tok.tokenname';
 
     $query = do_dbquery($sql);
     if ($query == false)
