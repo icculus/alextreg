@@ -5,7 +5,7 @@ $disable_debug = false;
 function write_error($err)
 {
     echo "<p><center><font color='#FF0000'>";
-    echo   "$ERROR: err<br>";
+    echo   "ERROR: $err<br>";
     echo "</font></center>\n";
 } // write_error
 
