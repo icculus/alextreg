@@ -52,7 +52,7 @@ function do_dbquery($sql, $link = NULL)
     if ($rc == false)
     {
         $err = mysql_error();
-        write_error("Error in SELECT statement: {$err}");
+        write_error("Problem in SELECT statement: {$err}");
         return(false);
     } // if
 
