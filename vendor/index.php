@@ -75,6 +75,8 @@ function op_addtoken()
         if (do_dbinsert($sql) == 1)
         {
             echo "<font color='#00FF00'>Token added.</font><br>\n";
+            $sql = "update alextreg_extensions set lastedit=NOW() where id=$sqlextid";
+            do_dbupdate($sql);
             do_showext($extname);
         } // if
     } // if
@@ -165,6 +167,8 @@ function op_addentrypoint()
         if (do_dbinsert($sql) == 1)
         {
             echo "<font color='#00FF00'>Entry point added.</font><br>\n";
+            $sql = "update alextreg_extensions set lastedit=NOW() where id=$sqlextid";
+            do_dbupdate($sql);
             do_showext($extname);
         } // if
     } // if
@@ -249,6 +253,47 @@ function op_addextension()
         echo "</form>\n";
     } // else
 } // op_addextension
+
+
+$operations['op_showhideext'] = 'op_showhideext';
+function op_showhideext()
+{
+    if (!is_authorized_vendor())
+    {
+        write_error("You shouldn't be here!");
+        return;
+    } // if
+
+    $newval = $_REQUEST['newval'];
+    if (empty($newval))
+    {
+        write_error('No toggle value specified.');
+        return;
+    } // if
+
+    $extid = $_REQUEST['extid'];
+    if (empty($extid))
+    {
+        write_error('No extension specified.');
+        return;
+    } // if
+
+    $extname = $_REQUEST['extname'];
+    if (empty($extname))
+    {
+        write_error('No extension name specified.');
+        return;
+    } // if
+
+    $sqlnewval = db_escape_string($newval);
+    $sqlextid = db_escape_string($extid);
+    $sql = "update alextreg_extensions set public=$sqlnewval, lastedit=NOW() where id=$sqlextid";
+    if (do_dbupdate($sql) == 1)
+    {
+        echo "<font color='#00FF00'>Extension updated.</font><br>\n";
+        do_showext($extname);
+    } // if
+} // op_showhideext
 
 
 function render_add_ui()

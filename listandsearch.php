@@ -217,8 +217,11 @@ function show_one_extension($extrow)
 {
     global $extflags_public;
 
+    $is_vendor = is_authorized_vendor();
+
     $extname = $extrow['extname'];
     $extid = $extrow['id'];
+    $extflags = $extrow['flags'];
     $wikiurl = get_alext_wiki_url($extname);
     $htmlextname = htmlentities($extname, ENT_QUOTES);
     echo "<p>$htmlextname (<a href='${wikiurl}'>docs</a>)\n";
@@ -228,13 +231,28 @@ function show_one_extension($extrow)
     echo "&nbsp;&nbsp;&nbsp;&nbsp;Last edited on ${extrow['lastedit']}<br>\n";
     echo "</font>\n";
 
+    if ($is_vendor)
+    {
+        $is_public = ($extflags & $extflags_public);
+        $toggle = ($is_public) ? 0 : 1);
+        $is = ($is_public) ? 'is' : 'is not';
+        echo "<p><b>Vendor:</b>\n";
+        echo "This extension $is publically visible.\n";
+        echo "<form>\n"
+        echo "<input type='hidden' name='extid' value='$extid'>\n";
+        echo "<input type='hidden' name='newval' value='$toggle'>\n";
+        echo "<input type='hidden' name='operation' value='op_showhideext'>\n";
+        echo "<input type='submit' name='form_submit' value='Toggle'>\n";
+        echo "</form>\n";
+    } // if
+
     echo "<p>Tokens:\n<ul>\n";
 
     $sql = 'select * from alextreg_tokens as tok' .
            ' left outer join alextreg_extensions as ext' .
            ' on tok.extid=ext.id';
 
-    if (!is_authorized_vendor())
+    if (!is_vendor)
         $sql .= " where (ext.flags & $extflags_public)";
 
     $query = do_dbquery($sql);
@@ -255,7 +273,7 @@ function show_one_extension($extrow)
     } // else
     db_free_result($query);
 
-    if (is_authorized_vendor())
+    if (is_vendor)
     {
         echo "  <li>\n<form>\n";
         echo "<b>Vendor:</b>\n";
@@ -275,7 +293,7 @@ function show_one_extension($extrow)
            ' left outer join alextreg_extensions as ext' .
            ' on ent.extid=ext.id';
 
-    if (!is_authorized_vendor())
+    if (!is_vendor)
         $sql .= " where (ext.flags & $extflags_public)";
 
     $query = do_dbquery($sql);
@@ -295,7 +313,7 @@ function show_one_extension($extrow)
     } // else
     db_free_result($query);
 
-    if (is_authorized_vendor())
+    if (is_vendor)
     {
         echo "  <li>\n<form>\n";
         echo "<b>Vendor:</b>\n";
