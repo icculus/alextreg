@@ -203,7 +203,7 @@ function op_addextension()
 $operations['op_showhideext'] = 'op_showhideext';
 function op_showhideext()
 {
-    write_debug('op_showhideext() called');
+    echo 'op_showhideext() called';
     if (!welcome_here()) return;
     if (!get_input_string('extname', 'extension name', $extname)) return;
     if (!get_input_int('extid', 'extension id', $extid)) return;
