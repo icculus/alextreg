@@ -1,22 +1,144 @@
 <?php
 
 require_once 'operations.php';
+require_once 'database.php';
+require_once 'common.php';
+
+$queryfuncs = array();
+
+
+$queryfuncs['extension'] = 'find_extension';
+function find_extension($wantname)
+{
+    $sql = 'select extname, id from alextreg_extensions';
+
+    if ($wantname)
+    {
+        $sqlwantname = db_escape_string($wantname);
+        $sql += " where extname=$sqlwantname";
+    } // if
+
+    $query = do_dbquery($sql);
+    if ($query == false)
+        return;  // error output is handled in database.php ...
+    else
+    {
+        if (($wantname) and (db_num_rows($query) != 1))
+            write_error('(Unexpected number of results from database!)');
+
+        print("<ul>\n");
+        while ( ($row = db_fetch_array($query)) != false )
+        {
+            $url = get_alext_wiki_url($row['id']);
+            print("  <li><a href='$url'>${row['extname']}</a>\n");
+        } // while
+        print("</ul>\n\n");
+    } // else
+
+    db_free_result($query);
+} // find_extension
+
+
+function find_token($additionalsql, $wantname)
+{
+    $sql = 'select tok.tokenname as tokenname,' +
+           ' tok.tokenval as tokenval,' +
+           ' ext.id as extid' +
+           ' from alextreg_tokens as tok' +
+           ' left outer join alextreg_extensions as ext' +
+           ' on tok.extid=ext.id' +
+           $additionalsql;
+
+    $query = do_dbquery($sql);
+    if ($query == false)
+        return;  // error output is handled in database.php ...
+    else
+    {
+        if (($wantname) and (db_num_rows($query) != 1))
+            write_error('(Unexpected number of results from database!)');
+
+        print("<ul>\n");
+        while ( ($row = db_fetch_array($query)) != false )
+        {
+            $url = get_alext_wiki_url($row['extid']);
+            $hex = sprintf("0x%X", $row['tokenval']);  // !!! FIXME: faster way to do this?
+            print("  <li>${row['tokenname']} ($hex)");
+            print(" from <a href='$url'>${row['extname']}</a>\n");
+        } // while
+        print("</ul>\n\n");
+    } // else
+
+    db_free_result($query);
+} // find_token
+
+
+$queryfuncs['tokenname'] = 'find_tokenname';
+function find_tokenname($wantname)
+{
+    $additionalsql = '';
+    if ($wantname)
+    {
+        $sqlwantname = db_escape_string($wantname);
+        $additionalsql += " where tok.tokenname=$sqlwantname";
+    } // if
+
+    find_token($additionalsql, $wantname);
+} // find_tokenname
+
+
+$queryfuncs['tokenval'] = 'find_tokenvalue';
+function find_tokenvalue($wantname)
+{
+    $additionalsql = '';
+    if ($wantname)
+    {
+        $sqlwantname = db_escape_string($wantname);
+        $additionalsql += " where tok.tokenval=$sqlwantname";
+    } // if
+
+    find_token($additionalsql, $wantname);
+} // find_tokenname
+
+
+$queryfuncs['entrypoint'] = 'find_entrypoint';
+function find_entrypoint($wantname)
+{
+    write_error('Not implemented.');  // !!! FIXME
+} // find_entrypoint
+
+
+$queryfuncs['anything'] = 'find_anything';
+function find_anything($wantname)
+{
+    write_error('Not implemented.');  // !!! FIXME
+} // find_anything
+
 
 $operations['op_findone'] = 'op_findone';
 function op_findone()
 {
     $wanttype = $_REQUEST['wanttype'];
     $wantname = $_REQUEST['wantname'];
-    echo "called op_findone($wantname, $wanttype)<br>\n";
-}
+    write_debug("called op_findone($wantname, $wanttype)");
+
+    $queryfunc = $queryfuncs[$wanttype];
+    if (!isset($queryfunc))
+    {
+        write_error('Invalid search type.');
+        return;
+    } // if
+
+    $queryfunc($wantname, true);
+} // op_findone
 
 
 $operations['op_findall'] = 'op_findall';
 function op_findall()
 {
     $wanttype = $_REQUEST['wanttype'];
-    echo "called op_findall($wanttype)<br>\n";
-}
+    write_debug("called op_findall($wanttype)");
+    write_error('Not implemented.');  // !!! FIXME
+} // op_findall
 
 
 
