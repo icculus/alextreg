@@ -220,7 +220,7 @@ function show_one_extension($extrow)
     $query = do_dbquery($sql);
     if ($query == false)
         return;  // uh...?
-    else if ($query == 0)
+    else if (db_num_rows($query) == 0)
         echo "  <li> (no new tokens.)\n";
     else
     {
@@ -257,7 +257,7 @@ function show_one_extension($extrow)
     $query = do_dbquery($sql);
     if ($query == false)
         return;  // uh...?
-    else if ($query == 0)
+    else if (db_num_rows($query) == 0)
         echo "  <li> (no new entry points.)\n";
     else
     {
