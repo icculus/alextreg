@@ -5,14 +5,17 @@ require_once 'operations.php';
 $operations['op_findone'] = 'op_findone';
 function op_findone()
 {
-    echo "called op_findone()<br>\n";
+    $wanttype = $_REQUEST['wanttype'];
+    $wantname = $_REQUEST['wantname'];
+    echo "called op_findone($wantname, $wanttype)<br>\n";
 }
 
 
 $operations['op_findall'] = 'op_findall';
 function op_findall()
 {
-    echo "called op_findall()<br>\n";
+    $wanttype = $_REQUEST['wanttype'];
+    echo "called op_findall($wanttype)<br>\n";
 }
 
 
