@@ -44,7 +44,7 @@ $queryfuncs['extension'] = 'find_extension';
 function find_extension($wantname)
 {
     $sql = 'select extname from alextreg_extensions' .
-           ' where (1==1)';
+           ' where (1=1)';
 
     if (!is_authorized_vendor())
         $sql .= ' and (flags & $extflags_public)';
@@ -72,7 +72,7 @@ function find_token($additionalsql, $wantname)
            ' ext.extname as extname' .
            ' from alextreg_tokens as tok' .
            ' left outer join alextreg_extensions as ext' .
-           ' on tok.extid=ext.id where (1==1)' .
+           ' on tok.extid=ext.id where (1=1)' .
            $additionalsql;
 
     if (!is_authorized_vendor())
@@ -123,7 +123,7 @@ function find_entrypoint($wantname)
            ' ext.extname as extname' .
            ' from alextreg_entrypoints as ent' .
            ' left outer join alextreg_extensions as ext' .
-           ' on ent.extid=ext.id where (1==1)';
+           ' on ent.extid=ext.id where (1=1)';
 
     if (!is_authorized_vendor())
         $sql .= ' and (ext.flags & $extflags_public)';
