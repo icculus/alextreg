@@ -231,9 +231,10 @@ function show_one_extension($extrow)
         while ( ($row = db_fetch_array($query)) != false )
         {
             $hex = sprintf("0x%X", $row['tokenval']);  // !!! FIXME: faster way to do this?
-            echo "  <li> ${row['tokenname']} ($hex):";
-            echo " added ${row['entrydate']},";
-            echo " last modified ${row['lastedit']}\n";
+            echo "  <li> ${row['tokenname']} ($hex)";
+            //echo " added ${row['entrydate']},";
+            //echo " last modified ${row['lastedit']}";
+            echo "\n";
         } // while
     } // else
     db_free_result($query);
@@ -269,9 +270,10 @@ function show_one_extension($extrow)
     {
         while ( ($row = db_fetch_array($query)) != false )
         {
-            echo "  <li> ${row['entrypointname']}:";
-            echo " added ${row['entrydate']},";
-            echo " last modified ${row['lastedit']}\n";
+            echo "  <li> ${row['entrypointname']}";
+            //echo " added ${row['entrydate']},";
+            //echo " last modified ${row['lastedit']}";
+            echo "\n";
         } // while
     } // else
     db_free_result($query);
