@@ -85,7 +85,7 @@ EOF;
 } // render_add_ui
 
 
-if (empty($_SERVER['REMOTE_USER']))
+if (!is_authorized_vendor())
     write_error('You need to have basic auth in place here.');
 else
 {
