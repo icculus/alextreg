@@ -218,38 +218,35 @@ function show_one_extension($extrow)
 
     if ($is_vendor)
     {
-        echo "<p><b>Vendor:</b>\n";
-        echo "<ul>\n";
+        echo "<p><b>Vendor:</b><br>\n";
 
         $toggle = (($public) ? 'n' : 'y');
         $is = ($public) ? 'is' : 'is not';
-        echo "<li><form>\n";
+        echo "<form>\n";
         echo "This extension $is publically visible.\n";
         echo "<input type='hidden' name='extid' value='$extid'>\n";
         echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
         echo "<input type='hidden' name='newval' value='$toggle'>\n";
         echo "<input type='hidden' name='operation' value='op_showhideext'>\n";
         echo "<input type='submit' name='form_submit' value='Toggle'>\n";
-        echo "</form>\n";
+        echo "</form><br>\n";
 
-        echo "<li><form>\n";
+        echo "<form>\n";
         echo "Add a new token named <input type='text' name='tokname'>\n";
         echo "with the value <input type='text' name='tokval'>.\n";
         echo "<input type='hidden' name='extid' value='$extid'>\n";
         echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
         echo "<input type='hidden' name='operation' value='op_addtoken'>\n";
         echo "<input type='submit' name='form_submit' value='Go!'>\n";
-        echo "</form>\n";
+        echo "</form><br>\n";
 
-        echo "<li><form>\n";
+        echo "<form>\n";
         echo "Add a new entry point named <input type='text' name='entrypointname'>\n";
         echo "<input type='hidden' name='extid' value='$extid'>\n";
         echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
         echo "<input type='hidden' name='operation' value='op_addentrypoint'>\n";
         echo "<input type='submit' name='form_submit' value='Go!'>\n";
-        echo "</form>\n";
-
-        echo "</ul>\n";
+        echo "</form><br>\n";
     } // if
 
     echo "<p>Tokens:\n<ul>\n";
