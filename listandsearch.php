@@ -229,7 +229,7 @@ function show_one_extension($extrow)
         echo "<input type='hidden' name='newval' value='$toggle'>\n";
         echo "<input type='hidden' name='operation' value='op_showhideext'>\n";
         echo "<input type='submit' name='form_submit' value='Toggle'>\n";
-        echo "</form><br>\n";
+        echo "</form>\n";
 
         echo "<form>\n";
         echo "Add a new token named <input type='text' name='tokname'>\n";
@@ -238,7 +238,7 @@ function show_one_extension($extrow)
         echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
         echo "<input type='hidden' name='operation' value='op_addtoken'>\n";
         echo "<input type='submit' name='form_submit' value='Go!'>\n";
-        echo "</form><br>\n";
+        echo "</form>\n";
 
         echo "<form>\n";
         echo "Add a new entry point named <input type='text' name='entrypointname'>\n";
@@ -246,7 +246,7 @@ function show_one_extension($extrow)
         echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
         echo "<input type='hidden' name='operation' value='op_addentrypoint'>\n";
         echo "<input type='submit' name='form_submit' value='Go!'>\n";
-        echo "</form><br>\n";
+        echo "</form>\n";
     } // if
 
     echo "<p>Tokens:\n<ul>\n";
