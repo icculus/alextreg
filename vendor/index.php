@@ -258,6 +258,46 @@ function op_delext()
 } // op_showhideext
 
 
+$operations['op_renameext'] = 'op_renameext';
+function op_renameext()
+{
+    if (!welcome_here()) return;
+    if (!get_input_string('newval', 'new extension name', $newval)) return;
+    if (!get_input_string('extname', 'extension name', $extname)) return;
+    if (!get_input_int('extid', 'extension id', $extid)) return;
+
+    // Just a small sanity check.
+    $cookie = $_REQUEST['iamsure'];
+    if ((!empty($cookie)) and ($cookie == $_SERVER['REMOTE_ADDR']))
+    {
+        $sqlnewval = db_escape_string($newval);
+        $sqlauthor = db_escape_string($_SERVER['REMOTE_USER']);
+        // ok, nuke it.
+        $sql = "update alextreg_extensions set extname='$sqlnewval', lastedit=NOW() where id=$extid";
+        if (do_dbupdate($sql) == 1)
+        {
+            echo "<font color='#00FF00'>Extension updated.</font><br>\n";
+            do_showext($newval);
+        } // if
+    } // if
+    else   // put out a confirmation...
+    {
+        $htmlnewval = htmlentities($newval, ENT_QUOTES);
+        $htmlextname = htmlentities($extname, ENT_QUOTES);
+        echo "About to rename an extension named '$htmlextname' to '$htmlnewval'.<br>\n";
+        echo "...if you're sure, click 'Confirm'...<br>\n";
+        echo "<form>\n";
+        echo "<input type='hidden' name='iamsure' value='${_SERVER['REMOTE_ADDR']}'>\n";
+        echo "<input type='hidden' name='extid' value='$extid'>\n";
+        echo "<input type='hidden' name='newval' value='$htmlnewval'>\n";
+        echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
+        echo "<input type='hidden' name='operation' value='op_renameext'>\n";
+        echo "<input type='submit' name='form_submit' value='Confirm'>\n";
+        echo "</form>\n";
+    } // else
+} // op_showhideext
+
+
 function render_add_ui()
 {
     echo <<< EOF
