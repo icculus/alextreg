@@ -43,7 +43,6 @@ function render_token_list($wantname, $query)
 $queryfuncs['extension'] = 'find_extension';
 function find_extension($wantname)
 {
-    $flags = is_authorized_vendor() ?
     $sql = 'select extname from alextreg_extensions' .
            ' where (1==1)';
 
