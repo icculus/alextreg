@@ -12,13 +12,15 @@ function do_operation()
 
     $op = $_REQUEST['operation'];
     if (empty($op))
-        return;  // nothing to do.
+        return false;  // nothing to do.
 
     $func = $operations[$op];
     if (empty($func))
         echo "<p><center><font color='#FF0000'>Bad operation</font></center>\n";
     else
         $func();  // make the call.
+
+    return true;
 } // do_operation
 
 ?>

@@ -274,8 +274,10 @@ if (!is_authorized_vendor())
 else
 {
     render_header();
-    do_operation();
-    render_search_ui();  // do this even if there was an operation to run.
+    if (do_operation())
+        echo "Back to <a href='${_SERVER['PHP_SELF']}'>search page</a>.\n";
+    else
+        render_search_ui();
     render_add_ui();
     render_footer();
 } // else
