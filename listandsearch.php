@@ -224,8 +224,8 @@ function show_one_extension($extrow)
     echo "<p>$htmlextname (<a href='${wikiurl}'>docs</a>)\n";
 
     echo "<p><font size='-1'>\n";
-    echo "&nbsp;&nbsp;&nbsp;&nbsp;Registered on ${row['entrydate']}<br>\n";
-    echo "&nbsp;&nbsp;&nbsp;&nbsp;Last edited on ${row['lastedit']}<br>\n";
+    echo "&nbsp;&nbsp;&nbsp;&nbsp;Registered on ${extrow['entrydate']}<br>\n";
+    echo "&nbsp;&nbsp;&nbsp;&nbsp;Last edited on ${extrow['lastedit']}<br>\n";
     echo "</font>\n";
 
     echo "<p>Tokens:\n<ul>\n";
