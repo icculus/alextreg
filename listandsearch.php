@@ -86,6 +86,8 @@ function find_extension($wantname)
 
 function find_token($additionalsql, $wantname)
 {
+    if (!get_input_bool('sortbyvalue', 'Sort By Value', &$sbv, 'n')) return;
+
     $sql = 'select tok.tokenname as tokenname,' .
            ' tok.tokenval as tokenval,' .
            ' ext.extname as extname' .
@@ -97,7 +99,7 @@ function find_token($additionalsql, $wantname)
     if (!is_authorized_vendor())
         $sql .= " and (ext.public=1)";
 
-    $sql .= ' order by tok.tokenname';
+    $sql .= ' order by ' . (($sbv) ? 'tok.tokenval' : 'tok.tokenname');
 
     $query = do_dbquery($sql);
     if ($query == false)
