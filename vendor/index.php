@@ -179,7 +179,10 @@ function op_addextension()
                " (extname, public, author, entrydate, lasteditauthor, lastedit)" .
                " values ('$sqlwantname', 0, '$sqlauthor', NOW(), '$sqlauthor', NOW())";
         if (do_dbinsert($sql) == 1)
+        {
             echo "<font color='#00FF00'>Extension added.</font><br>\n";
+            do_showext($extname);
+        } // if
     } // if
     else   // put out a confirmation...
     {
