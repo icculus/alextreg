@@ -61,8 +61,7 @@ function render_entrypoint_list($wantname, $query)
 $queryfuncs['extension'] = 'find_extension';
 function find_extension($wantname)
 {
-    $sql = 'select extname from alextreg_extensions' .
-           ' order by extname where (1=1)';
+    $sql = 'select extname from alextreg_extensions where (1=1)';
 
     if (!is_authorized_vendor())
         $sql .= " and (public=1)";
@@ -72,6 +71,8 @@ function find_extension($wantname)
         $sqlwantname = db_escape_string($wantname);
         $sql .= " and (extname='$sqlwantname')";
     } // if
+
+    $sql .= ' order by extname';
 
     $query = do_dbquery($sql);
     if ($query == false)
