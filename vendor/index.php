@@ -45,6 +45,8 @@ function update_papertrail($action, $donesql, $extid)
 $operations['op_renderpapertrail'] = 'op_renderpapertrail';
 function op_renderpapertrail()
 {
+    if (!get_input_bool('showsql', 'should show sql', $showsql, 'y')) return;
+
     $sql = 'select * from alextreg_papertrail order by entrydate';
     $query = do_dbquery($sql);
     if ($query == false)
@@ -58,9 +60,10 @@ function op_renderpapertrail()
         $htmlaction = htmlentities($row['action'], ENT_QUOTES);
         $htmlauthor = htmlentities($row['author'], ENT_QUOTES);
         $htmlentrydate = htmlentities($row['entrydate'], ENT_QUOTES);
-        $htmlsql = htmlentities($row['sql'], ENT_QUOTES);
-        echo "  <li>$htmlaction: $htmlauthor, $htmlentrydate<br>\n";
-        echo "      '$htmlsql'\n";
+        $htmlsql = '';
+        if ($showsql)
+            $htmlsql = "<br>\n'" . htmlentities($row['sql'], ENT_QUOTES) . "'";
+        echo "  <li>$htmlaction: $htmlauthor, ${htmlentrydate}${htmlsql}\n";
     } // while
     db_free_result($query);
 
