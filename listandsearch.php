@@ -123,6 +123,12 @@ function op_findone()
     $wantname = $_REQUEST['wantname'];
     write_debug("called op_findone($wanttype, $wantname)");
 
+    if ( (empty($wantname)) or (empty($wanttype)) )
+    {
+        write_error('Please fill out all fields.');
+        return;
+    } // if
+
     $queryfunc = $queryfuncs[$wanttype];
     if (!isset($queryfunc))
     {
