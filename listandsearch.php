@@ -218,7 +218,7 @@ function show_one_extension($extrow)
 
     if ($is_vendor)
     {
-        echo "<p>\n"
+        echo "<p>\n";
         echo "<table><tr><td><b>Vendor:</b></td></tr><tr><td>\n";
 
         $toggle = (($public) ? 'n' : 'y');
