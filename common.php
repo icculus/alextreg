@@ -53,4 +53,66 @@ function get_alext_url($extname)
     return("${_SERVER['PHP_SELF']}?operation=op_showext&extname=${htmlextname}");
 } // get_alext_url
 
+
+function get_input_sanitized($reqname, $reqtype, &$reqval)
+{
+    $val = $_REQUEST[$reqname];
+    if (!isset($val))
+    {
+        write_error("No $reqtype specified.");
+        return false;
+    } // if
+
+    $reqval = trim($val);
+    if ($reqval == '')
+    {
+        write_error("$reqtype is blank");
+        return false;
+    } // if
+
+    return true;
+} // get_input_sanitized
+
+
+function get_input_string($reqname, $reqtype, &$reqval)
+{
+    return get_input_sanitized($reqname, $reqtype, $reqval);
+} // get_input_string
+
+
+function get_input_number($reqname, $reqtype, &$reqval)
+{
+    if (!get_input_sanitized($reqname, $reqtype, $reqval))
+        return false;
+
+    if (sscanf($reqval, "0x%X", &$hex) == 1) // it's a 0xHEX value.
+        $reqval = $hex;
+
+    if (!is_numeric($reqval))
+    {
+        write_error("$reqtype isn't a number");
+        return false;
+    } // if
+} // get_input_number
+
+
+function get_input_int($reqname, $reqtype, &$reqval)
+{
+    if (!get_input_number($reqname, $reqtype, $reqval))
+        return false;
+
+    $reqval = (int) $reqval;
+    return true;
+} // get_input_int
+
+
+function get_input_float($reqname, $reqtype, &$reqval)
+{
+    if (!get_input_number($reqname, $reqtype, $reqval))
+        return false;
+
+    $reqval = (float) $reqval;
+    return true;
+} // get_input_float
+
 ?>
