@@ -250,19 +250,19 @@ function show_one_extension($extrow)
         echo "</form>\n";
 
         echo "<form>\n";
-        echo "I'd like to delete this extension.\n";
-        echo "<input type='hidden' name='extid' value='$extid'>\n";
-        echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
-        echo "<input type='hidden' name='operation' value='op_delext'>\n";
-        echo "<input type='submit' name='form_submit' value='Go!'>\n";
-        echo "</form>\n";
-
-        echo "<form>\n";
         echo "I'd like to rename this extension to\n";
         echo "<input type='text' name='newval' value=''>.\n";
         echo "<input type='hidden' name='extid' value='$extid'>\n";
         echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
         echo "<input type='hidden' name='operation' value='op_renameext'>\n";
+        echo "<input type='submit' name='form_submit' value='Go!'>\n";
+        echo "</form>\n";
+
+        echo "<form>\n";
+        echo "I'd like to delete this extension.\n";
+        echo "<input type='hidden' name='extid' value='$extid'>\n";
+        echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
+        echo "<input type='hidden' name='operation' value='op_delext'>\n";
         echo "<input type='submit' name='form_submit' value='Go!'>\n";
         echo "</form>\n";
 
