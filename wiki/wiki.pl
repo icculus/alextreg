@@ -5092,5 +5092,8 @@ sub DoTrimUsers {
 #END_OF_OTHER_CODE
 
 &DoWikiRequest()  if ($RunCGI && ($_ ne 'nocgi'));   # Do everything.
+print "remote user: ";
+print $ENV{'REMOTE_USER'};
+print "<br>\n";
 1; # In case we are loaded from elsewhere
 # == End of UseModWiki script. ===========================================
