@@ -218,7 +218,8 @@ function show_one_extension($extrow)
 
     if ($is_vendor)
     {
-        echo "<p><b>Vendor:</b><br>\n";
+        echo "<p>\n"
+        echo "<table><tr><td><b>Vendor:</b></td></tr><tr><td>\n";
 
         $toggle = (($public) ? 'n' : 'y');
         $is = ($public) ? 'is' : 'is not';
@@ -247,6 +248,8 @@ function show_one_extension($extrow)
         echo "<input type='hidden' name='operation' value='op_addentrypoint'>\n";
         echo "<input type='submit' name='form_submit' value='Go!'>\n";
         echo "</form>\n";
+
+        echo "</td></tr></table>\n";
     } // if
 
     echo "<p>Tokens:\n<ul>\n";
