@@ -234,7 +234,7 @@ function show_one_extension($extrow)
     if ($is_vendor)
     {
         $is_public = ($extflags & $extflags_public);
-        $toggle = ($is_public) ? 0 : 1);
+        $toggle = (($is_public) ? 0 : 1);
         $is = ($is_public) ? 'is' : 'is not';
         echo "<p><b>Vendor:</b>\n";
         echo "This extension $is publically visible.\n";
