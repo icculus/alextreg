@@ -55,10 +55,10 @@ function op_renderpapertrail()
     
     while ( ($row = db_fetch_array($query)) != false )
     {
-        $htmlaction = htmlentities(${row['action']}, ENT_QUOTES);
-        $htmlauthor = htmlentities(${row['author']}, ENT_QUOTES);
-        $htmlentrydate = htmlentities(${row['entrydate']}, ENT_QUOTES);
-        $htmlsql = htmlentities(${row['sql']}, ENT_QUOTES);
+        $htmlaction = htmlentities($row['action'], ENT_QUOTES);
+        $htmlauthor = htmlentities($row['author'], ENT_QUOTES);
+        $htmlentrydate = htmlentities($row['entrydate'], ENT_QUOTES);
+        $htmlsql = htmlentities($row['sql'], ENT_QUOTES);
         echo "  <li>$htmlaction: $htmlauthor, $htmlentrydate<br>\n";
         echo "      '$htmlsql'\n";
     } // while
