@@ -222,6 +222,12 @@ function show_one_extension($extrow)
     $wikiurl = get_alext_wiki_url($extname);
     $htmlextname = htmlentities($extname, ENT_QUOTES);
     echo "<p>$htmlextname (<a href='${wikiurl}'>docs</a>)\n";
+
+    echo "<p><font size='-1'>\n";
+    echo "&nbsp;&nbsp;&nbsp;&nbsp;Registered on ${row['entrydate']}<br>\n";
+    echo "&nbsp;&nbsp;&nbsp;&nbsp;Last edited on ${row['lastedit']}<br>\n";
+    echo "</font>\n";
+
     echo "<p>Tokens:\n<ul>\n";
 
     $sql = 'select * from alextreg_tokens as tok' .
