@@ -7,6 +7,7 @@ function render_header($title = 'OpenAL Extension Registry')
 // !!! FIXME: need more here, I guess.
 echo <<< EOF
 <html><head><title>$title</title></head><body>
+<center><img src='$img'><br>OpenAL Extension Registry<hr></center>
 
 EOF;
 } // render_header
