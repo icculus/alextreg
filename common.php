@@ -40,10 +40,7 @@ function current_sql_datetime()
 function get_alext_wiki_url($extname)
 {
     $htmlextname = htmlentities($extname, ENT_QUOTES);
-    $dir = '';
-    if (is_authorized_vendor())
-        $dir = 'vendor/wiki/';
-    return("${dir}wiki.pl?$htmlextname");
+    return("wiki/wiki.pl?$htmlextname");
 } // get_alext_wiki_url
 
 function get_alext_url($extname)
