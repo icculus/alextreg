@@ -52,6 +52,7 @@ CREATE TABLE alextreg_tokens (
     tokenname varchar(128) not null,
     tokenval int not null,
     extid int not null,
+    author varchar(128) not null,
     entrydate datetime not null,
     lastedit datetime not null,
     primary key (id)
@@ -63,6 +64,7 @@ CREATE TABLE alextreg_entrypoints (
     id int not null auto_increment,
     entrypointname varchar(128) not null,
     extid int not null,
+    author varchar(128) not null,
     entrydate datetime not null,
     lastedit datetime not null,
     primary key (id)
