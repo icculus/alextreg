@@ -130,7 +130,7 @@ function find_tokenvalue($wantname)
     if ($wantname)
     {
         $sqlwantname = db_escape_string($wantname);
-        $additionalsql .= " where tok.tokenval='$sqlwantname'";
+        $additionalsql .= " where tok.tokenval=$sqlwantname";
     } // if
 
     find_token($additionalsql, $wantname);
