@@ -67,6 +67,7 @@ function op_addtoken()
     } // if
     else   // put out a confirmation...
     {
+        $htmlextid= htmlentities($extid, ENT_QUOTES);
         $htmlname = htmlentities($tokname, ENT_QUOTES);
         $htmltokname = htmlentities($tokname, ENT_QUOTES);
         $htmltokval = htmlentities($tokval, ENT_QUOTES);
@@ -83,6 +84,7 @@ function op_addtoken()
         echo "<input type='hidden' name='operation' value='op_addtoken'>\n";
         echo "<input type='hidden' name='tokname' value='$htmltokname'>\n";
         echo "<input type='hidden' name='tokval' value='$htmltokval'>\n";
+        echo "<input type='hidden' name='extid' value='$htmlextid'>\n";
         echo "<input type='hidden' name='iamsure' value='${_SERVER['REMOTE_ADDR']}'>\n";
         echo "<input type='submit' name='form_submit' value='Confirm'>\n";
         echo "</form>\n";
