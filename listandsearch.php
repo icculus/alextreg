@@ -406,7 +406,6 @@ Where do you want to go today?
   named <input type="text" name="wantname" value="">.
   <input type="hidden" name="operation" value="op_findone">
   <input type="submit" name="form_submit" value="Go!">
-  <input type="reset" value="Clear">
 </form>
 
 EOF;
