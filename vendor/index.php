@@ -181,7 +181,7 @@ function op_addextension()
         if (do_dbinsert($sql) == 1)
         {
             echo "<font color='#00FF00'>Extension added.</font><br>\n";
-            do_showext($extname);
+            do_showext($wantname);
         } // if
     } // if
     else   // put out a confirmation...
