@@ -224,7 +224,10 @@ function show_one_extension($extrow)
 
     // get the tokens, move it to an array of db rows...
     $tokens = array();
-    $sql = "select * from alextreg_tokens where (extid=$extid)";
+    $sql = 'select * from alextreg_tokens as tok' .
+           ' left outer join alextreg_extensions as ext' .
+           " where (ext.id=$extid)";
+
     if (!$is_vendor)
         $sql .= ' and (ext.public=1)';
 
@@ -236,7 +239,9 @@ function show_one_extension($extrow)
     db_free_result($query);
 
     $entrypoints = array();
-    $sql = "select * from alextreg_entrypoints where (extid=$extid)";
+    $sql = 'select * from alextreg_entrypoints as ent' .
+           ' left outer join alextreg_extensions as ext' .
+           " where (ext.id=$extid)";
     if (!$is_vendor)
         $sql .= ' and (ext.public=1)';
 
