@@ -6,7 +6,7 @@ function render_header($title = 'OpenAL Extension Registry')
 echo <<< EOF
 <html><head><title>$title</title></head><body>
 
-EOF
+EOF;
 } // render_header
 
 function render_footer()
@@ -16,7 +16,7 @@ echo <<< EOF
 
 </body></html>
 
-EOF
+EOF;
 } // render_footer
 
 ?>
