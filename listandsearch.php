@@ -116,11 +116,24 @@ function find_anything($wantname)
 } // find_anything
 
 
-$operations['op_findone'] = 'op_findone';
-function op_findone()
+function do_find($wanttype, $wantname = NULL)
 {
     global $queryfuncs;
 
+    $queryfunc = $queryfuncs[$wanttype];
+    if (!isset($queryfunc))
+    {
+        write_error('Invalid search type.');
+        return;
+    } // if
+
+    $queryfunc($wantname);
+} // do_find
+
+
+$operations['op_findone'] = 'op_findone';
+function op_findone()
+{
     $wanttype = $_REQUEST['wanttype'];
     $wantname = $_REQUEST['wantname'];
     write_debug("called op_findone($wanttype, $wantname)");
@@ -131,14 +144,7 @@ function op_findone()
         return;
     } // if
 
-    $queryfunc = $queryfuncs[$wanttype];
-    if (!isset($queryfunc))
-    {
-        write_error('Invalid search type.');
-        return;
-    } // if
-
-    $queryfunc($wantname);
+    do_find($wanttype, $wantname);
 } // op_findone
 
 
@@ -147,7 +153,7 @@ function op_findall()
 {
     $wanttype = $_REQUEST['wanttype'];
     write_debug("called op_findall($wanttype)");
-    write_error('Not implemented.');  // !!! FIXME
+    do_find($wanttype);
 } // op_findall
 
 
