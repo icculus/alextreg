@@ -19,7 +19,7 @@ function render_extension_list($wantname, $query)
         $url = get_alext_url($row['extname']);
         print("  <li><a href='$url'>${row['extname']}</a>\n");
     } // while
-    print("</ul>\n<p>Total results: $count\n");
+    print("</ul>\n<p>Total results: $count\n<p>\n");
 } // render_extension_list
 
 
@@ -37,7 +37,7 @@ function render_token_list($wantname, $query)
         print("  <li>${row['tokenname']} ($hex)");
         print(" from <a href='$url'>${row['extname']}</a>\n");
     } // while
-    print("</ul>\n<p>Total results: $count\n");
+    print("</ul>\n<p>Total results: $count\n<p>\n");
 } // render_token_list
 
 
@@ -54,7 +54,7 @@ function render_entrypoint_list($wantname, $query)
         print("  <li>${row['entrypointname']} ");
         print(" from <a href='$url'>${row['extname']}</a>\n");
     } // while
-    print("</ul>\n<p>Total results: $count\n");
+    print("</ul>\n<p>Total results: $count\n<p>\n");
 } // render_entrypoint_list
 
 
