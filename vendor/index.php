@@ -277,7 +277,7 @@ function op_deltok()
         $sqltokname = db_escape_string($tokname);
         $sqlauthor = db_escape_string($_SERVER['REMOTE_USER']);
         // ok, nuke it.
-        $sql = "delete from alextreg_tokens where tokname='$sqltokname'";
+        $sql = "delete from alextreg_tokens where tokenname='$sqltokname'";
         if (do_dbdelete($sql) == 1)
         {
             echo "<font color='#00FF00'>TOKEN DELETED!</font><br>\n";
