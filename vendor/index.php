@@ -43,7 +43,6 @@ function op_addextension()
     $cookie = $_REQUEST['iamsure'];
     if ((!empty($cookie)) and ($cookie == $_SERVER['REMOTE_ADDR']))
     {
-
         $sqlauthor = db_escape_string($_SERVER['REMOTE_USER']);
         // ok, add it to the database.
         $sql = "insert into alextreg_extensions" .
@@ -56,7 +55,7 @@ function op_addextension()
         $htmlname = htmlentities($wantname, ENT_QUOTES);
         echo "About to add an extension named $htmlname.<br>\n";
         echo "You can add tokens and entry points to this extension in a moment.<br>\n";
-        echo "...if you're sure, click 'Confirm'...<br>\n");
+        echo "...if you're sure, click 'Confirm'...<br>\n";
         echo "<form>\n";
         echo "<input type='hidden' name='wantname' value='$htmlname'>\n";
         echo "<input type='hidden' name='operation' value='op_addextension'>\n";
