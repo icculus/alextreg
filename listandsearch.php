@@ -15,7 +15,7 @@ function find_extension($wantname)
     if ($wantname)
     {
         $sqlwantname = db_escape_string($wantname);
-        $sql .= " where extname=$sqlwantname";
+        $sql .= " where extname='$sqlwantname'";
     } // if
 
     $query = do_dbquery($sql);
@@ -79,7 +79,7 @@ function find_tokenname($wantname)
     if ($wantname)
     {
         $sqlwantname = db_escape_string($wantname);
-        $additionalsql .= " where tok.tokenname=$sqlwantname";
+        $additionalsql .= " where tok.tokenname='$sqlwantname'";
     } // if
 
     find_token($additionalsql, $wantname);
@@ -93,7 +93,7 @@ function find_tokenvalue($wantname)
     if ($wantname)
     {
         $sqlwantname = db_escape_string($wantname);
-        $additionalsql .= " where tok.tokenval=$sqlwantname";
+        $additionalsql .= " where tok.tokenval='$sqlwantname'";
     } // if
 
     find_token($additionalsql, $wantname);
