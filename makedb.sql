@@ -38,7 +38,7 @@ USE alextreg;
 CREATE TABLE alextreg_extensions (
     id int not null auto_increment,
     extname varchar(128) not null,
-    flags int not null,
+    public boolean not null,
     author varchar(128) not null,
     entrydate datetime not null,
     lastedit datetime not null,

@@ -60,13 +60,11 @@ function render_entrypoint_list($wantname, $query)
 $queryfuncs['extension'] = 'find_extension';
 function find_extension($wantname)
 {
-    global $extflags_public;
-
     $sql = 'select extname from alextreg_extensions' .
            ' where (1=1)';
 
     if (!is_authorized_vendor())
-        $sql .= " and (flags & $extflags_public)";
+        $sql .= " and (public=1)";
 
     if ($wantname)
     {
@@ -86,8 +84,6 @@ function find_extension($wantname)
 
 function find_token($additionalsql, $wantname)
 {
-    global $extflags_public;
-
     $sql = 'select tok.tokenname as tokenname,' .
            ' tok.tokenval as tokenval,' .
            ' ext.extname as extname' .
@@ -97,7 +93,7 @@ function find_token($additionalsql, $wantname)
            $additionalsql;
 
     if (!is_authorized_vendor())
-        $sql .= " and (ext.flags & $extflags_public)";
+        $sql .= " and (ext.public=1)";
 
     $query = do_dbquery($sql);
     if ($query == false)
@@ -142,8 +138,6 @@ function find_tokenvalue($wantname)
 $queryfuncs['entrypoint'] = 'find_entrypoint';
 function find_entrypoint($wantname)
 {
-    global $extflags_public;
-
     $sql = 'select ent.entrypointname as entrypointname,' .
            ' ext.extname as extname' .
            ' from alextreg_entrypoints as ent' .
@@ -151,7 +145,7 @@ function find_entrypoint($wantname)
            ' on ent.extid=ext.id where (1=1)';
 
     if (!is_authorized_vendor())
-        $sql .= " and (ext.flags & $extflags_public)";
+        $sql .= " and (ext.public=1)";
 
     if ($wantname)
     {
@@ -215,13 +209,11 @@ function op_findone()
 
 function show_one_extension($extrow)
 {
-    global $extflags_public;
-
     $is_vendor = is_authorized_vendor();
 
     $extname = $extrow['extname'];
     $extid = $extrow['id'];
-    $extflags = $extrow['flags'];
+    $public = $extrow['public'];
     $wikiurl = get_alext_wiki_url($extname);
     $htmlextname = htmlentities($extname, ENT_QUOTES);
     echo "<p>$htmlextname (<a href='${wikiurl}'>docs</a>)\n";
@@ -233,13 +225,13 @@ function show_one_extension($extrow)
 
     if ($is_vendor)
     {
-        $is_public = ($extflags & $extflags_public);
-        $toggle = (($is_public) ? 0 : 1);
-        $is = ($is_public) ? 'is' : 'is not';
+        $toggle = (($public) ? 0 : 1);
+        $is = ($public) ? 'is' : 'is not';
         echo "<p><form>\n";
         echo "<b>Vendor:</b>\n";
         echo "This extension $is publically visible.\n";
         echo "<input type='hidden' name='extid' value='$extid'>\n";
+        echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
         echo "<input type='hidden' name='newval' value='$toggle'>\n";
         echo "<input type='hidden' name='operation' value='op_showhideext'>\n";
         echo "<input type='submit' name='form_submit' value='Toggle'>\n";
@@ -253,7 +245,7 @@ function show_one_extension($extrow)
            ' on tok.extid=ext.id';
 
     if (!is_vendor)
-        $sql .= " where (ext.flags & $extflags_public)";
+        $sql .= " and (ext.public=1)";
 
     $query = do_dbquery($sql);
     if ($query == false)
@@ -294,7 +286,7 @@ function show_one_extension($extrow)
            ' on ent.extid=ext.id';
 
     if (!is_vendor)
-        $sql .= " where (ext.flags & $extflags_public)";
+        $sql .= " and (ext.public=1)";
 
     $query = do_dbquery($sql);
     if ($query == false)
@@ -342,14 +334,12 @@ function op_findall()
 
 function do_showext($extname)
 {
-    global $extflags_public;
-
     $sqlextname = db_escape_string($extname);
     $sql = "select * from alextreg_extensions" .
            " where extname='$sqlextname'";
 
     if (!is_authorized_vendor())
-        $sql .= " and (flags & $extflags_public)";
+        $sql .= " and (public=1)";
 
     $query = do_dbquery($sql);
     if ($query == false)

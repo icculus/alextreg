@@ -229,13 +229,11 @@ function op_addextension()
     $cookie = $_REQUEST['iamsure'];
     if ((!empty($cookie)) and ($cookie == $_SERVER['REMOTE_ADDR']))
     {
-        global $extflags_public;
-        $flags = $extflags_public;  // !!! FIXME
         $sqlauthor = db_escape_string($_SERVER['REMOTE_USER']);
         // ok, add it to the database.
         $sql = "insert into alextreg_extensions" .
-               " (extname, flags, author, entrydate, lastedit)" .
-               " values ('$sqlwantname', $flags, '$sqlauthor', NOW(), NOW())";
+               " (extname, public, author, entrydate, lastedit)" .
+               " values ('$sqlwantname', 0, '$sqlauthor', NOW(), NOW())";
         if (do_dbinsert($sql) == 1)
             echo "<font color='#00FF00'>Extension added.</font><br>\n";
     } // if

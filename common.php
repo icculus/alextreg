@@ -2,8 +2,6 @@
 
 $enable_debug = (isset($_REQUEST['debug']));
 
-$extflags_public = (1 << 0);
-
 function is_authorized_vendor()
 {
     return(!empty($_SERVER['REMOTE_USER']));
