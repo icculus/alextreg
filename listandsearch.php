@@ -15,7 +15,7 @@ function find_extension($wantname)
     if ($wantname)
     {
         $sqlwantname = db_escape_string($wantname);
-        $sql += " where extname=$sqlwantname";
+        $sql .= " where extname=$sqlwantname";
     } // if
 
     $query = do_dbquery($sql);
@@ -41,12 +41,12 @@ function find_extension($wantname)
 
 function find_token($additionalsql, $wantname)
 {
-    $sql = 'select tok.tokenname as tokenname,' +
-           ' tok.tokenval as tokenval,' +
-           ' ext.id as extid' +
-           ' from alextreg_tokens as tok' +
-           ' left outer join alextreg_extensions as ext' +
-           ' on tok.extid=ext.id' +
+    $sql = 'select tok.tokenname as tokenname,' .
+           ' tok.tokenval as tokenval,' .
+           ' ext.id as extid' .
+           ' from alextreg_tokens as tok' .
+           ' left outer join alextreg_extensions as ext' .
+           ' on tok.extid=ext.id' .
            $additionalsql;
 
     $query = do_dbquery($sql);
@@ -79,7 +79,7 @@ function find_tokenname($wantname)
     if ($wantname)
     {
         $sqlwantname = db_escape_string($wantname);
-        $additionalsql += " where tok.tokenname=$sqlwantname";
+        $additionalsql .= " where tok.tokenname=$sqlwantname";
     } // if
 
     find_token($additionalsql, $wantname);
@@ -93,7 +93,7 @@ function find_tokenvalue($wantname)
     if ($wantname)
     {
         $sqlwantname = db_escape_string($wantname);
-        $additionalsql += " where tok.tokenval=$sqlwantname";
+        $additionalsql .= " where tok.tokenval=$sqlwantname";
     } // if
 
     find_token($additionalsql, $wantname);
