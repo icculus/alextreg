@@ -50,12 +50,12 @@ function op_addtoken()
         $sqlauthor = db_escape_string($_SERVER['REMOTE_USER']);
         // ok, add it to the database.
         $sql = "insert into alextreg_tokens" .  // !!! FIXME: Should have author associated with it!
-               " (tokenname, tokenval, extid, author, entrydate, lastedit)" .
-               " values ('$sqltokname', $tokval, $extid, '$sqlauthor', NOW(), NOW())";
+               " (tokenname, tokenval, extid, author, entrydate, lasteditauthor, lastedit)" .
+               " values ('$sqltokname', $tokval, $extid, '$sqlauthor', NOW(), '$sqlauthor', NOW())";
         if (do_dbinsert($sql) == 1)
         {
             echo "<font color='#00FF00'>Token added.</font><br>\n";
-            $sql = "update alextreg_extensions set lastedit=NOW() where id=$extid";
+            $sql = "update alextreg_extensions set lastedit=NOW(), lasteditauth='$sqlauthor' where id=$extid";
             do_dbupdate($sql);
             do_showext($extname);
         } // if
@@ -117,12 +117,12 @@ function op_addentrypoint()
         $sqlauthor = db_escape_string($_SERVER['REMOTE_USER']);
         // ok, add it to the database.
         $sql = "insert into alextreg_entrypoints" .
-               " (entrypointname, extid, author, entrydate, lastedit)" .
-               " values ('$sqlentname', $extid, '$sqlauthor', NOW(), NOW())";
+               " (entrypointname, extid, author, entrydate, lasteditauthor, lastedit)" .
+               " values ('$sqlentname', $extid, '$sqlauthor', NOW(), '$sqlauthor', NOW())";
         if (do_dbinsert($sql) == 1)
         {
             echo "<font color='#00FF00'>Entry point added.</font><br>\n";
-            $sql = "update alextreg_extensions set lastedit=NOW() where id=$extid";
+            $sql = "update alextreg_extensions set lastedit=NOW(), lasteditauthor='$sqlauthor' where id=$extid";
             do_dbupdate($sql);
             do_showext($extname);
         } // if
@@ -176,8 +176,8 @@ function op_addextension()
         $sqlauthor = db_escape_string($_SERVER['REMOTE_USER']);
         // ok, add it to the database.
         $sql = "insert into alextreg_extensions" .
-               " (extname, public, author, entrydate, lastedit)" .
-               " values ('$sqlwantname', 0, '$sqlauthor', NOW(), NOW())";
+               " (extname, public, author, entrydate, lasteditauthor, lastedit)" .
+               " values ('$sqlwantname', 0, '$sqlauthor', NOW(), '$sqlauthor', NOW())";
         if (do_dbinsert($sql) == 1)
             echo "<font color='#00FF00'>Extension added.</font><br>\n";
     } // if
@@ -205,7 +205,8 @@ function op_showhideext()
     if (!get_input_int('extid', 'extension id', $extid)) return;
     if (!get_input_bool('newval', 'toggle value', $newval)) return;
 
-    $sql = "update alextreg_extensions set public=$newval, lastedit=NOW() where id=$extid";
+    $sqlauthor = db_escape_string($_SERVER['REMOTE_USER']);
+    $sql = "update alextreg_extensions set public=$newval, lastedit=NOW(), lasteditauthor='$sqlauthor' where id=$extid";
     if (do_dbupdate($sql) == 1)
     {
         echo "<font color='#00FF00'>Extension updated.</font><br>\n";
@@ -273,7 +274,8 @@ function op_renameext()
         $sqlnewval = db_escape_string($newval);
         $sqlauthor = db_escape_string($_SERVER['REMOTE_USER']);
         // ok, nuke it.
-        $sql = "update alextreg_extensions set extname='$sqlnewval', lastedit=NOW() where id=$extid";
+        $sql = "update alextreg_extensions set extname='$sqlnewval'," .
+               " lastedit=NOW(), lasteditauthor='$sqlauthor' where id=$extid";
         if (do_dbupdate($sql) == 1)
         {
             echo "<font color='#00FF00'>Extension updated.</font><br>\n";

@@ -211,9 +211,10 @@ function show_one_extension($extrow)
     $htmlextname = htmlentities($extname, ENT_QUOTES);
     echo "<p>$htmlextname (<a href='${wikiurl}'>docs</a>)\n";
 
+    $tab = '&nbsp;&nbsp;&nbsp;&nbsp;';
     echo "<p><font size='-1'>\n";
-    echo "&nbsp;&nbsp;&nbsp;&nbsp;Registered on ${extrow['entrydate']}<br>\n";
-    echo "&nbsp;&nbsp;&nbsp;&nbsp;Last edited on ${extrow['lastedit']}<br>\n";
+    echo "${tab}Registered on ${extrow['entrydate']} by ${extrow['author']}<br>\n";
+    echo "${tab}Last edited on ${extrow['lastedit']} by ${extrow['lasteditauthor']}<br>\n";
     echo "</font>\n";
 
     if ($is_vendor)
