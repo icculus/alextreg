@@ -262,10 +262,7 @@ function show_one_extension($extrow)
 
     echo "<p>Tokens:\n<ul>\n";
 
-    $sql = 'select * from alextreg_tokens as tok' .
-           ' left outer join alextreg_extensions as ext' .
-           ' on tok.extid=ext.id';
-
+    $sql = 'select * from alextreg_tokens where (extid=$extid)';
     if (!$is_vendor)
         $sql .= " and (ext.public=1)";
 
@@ -290,10 +287,7 @@ function show_one_extension($extrow)
     echo "</ul>\n";
 
     echo "<p>Entry points:\n<ul>\n";
-    $sql = 'select * from alextreg_entrypoints as ent' .
-           ' left outer join alextreg_extensions as ext' .
-           ' on ent.extid=ext.id';
-
+    $sql = 'select * from alextreg_entrypoints where (extid=$extid)';
     if (!$is_vendor)
         $sql .= " and (ext.public=1)";
 
