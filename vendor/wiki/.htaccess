@@ -1,6 +1,6 @@
 <Files *>
-  AuthUserFile ./.htpasswd
-  AuthName OpenAL Vendor Login
+  AuthUserFile ../.htpasswd
+  AuthName "OpenAL Vendor Login"
   AuthType Basic
   Require valid-user
 </Files>
