@@ -303,7 +303,10 @@ function show_one_extension($extrow)
             echo "<select name='tokname' size='1'>\n";
             echo "  <option value=''>...</option>\n";
             foreach ($tokens as $row)
-                echo "  <option value='${row['id']}'>${row['tokenname']}</option>\n";
+            {
+                $name = htmlentities(${row['tokenname']}, ENT_QUOTES);
+                echo "  <option value='$name'>$name</option>\n";
+            } // foreach
             echo "</select>\n";
             echo "<input type='hidden' name='extid' value='$extid'>\n";
             echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
@@ -318,8 +321,11 @@ function show_one_extension($extrow)
             echo "I want to delete the entry point named\n";
             echo "<select name='entname' size='1'>\n";
             echo "  <option value=''>...</option>\n";
-            foreach ($tokens as $row)
-                echo "  <option value='${row['entrypointname']}'>${row['entrypointname']}</option>\n";
+            foreach ($entrypoints as $row)
+            {
+                $name = htmlentities(${row['entrypointname']}, ENT_QUOTES);
+                echo "  <option value='$name'>$name</option>\n";
+            } // foreach
             echo "</select>\n";
             echo "<input type='hidden' name='extid' value='$extid'>\n";
             echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
