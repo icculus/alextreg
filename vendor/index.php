@@ -29,7 +29,7 @@ function render_add_ui()
   <input type="submit" name="form_submit" value="Go!">
 </form>
 
-EOF
+EOF;
 } // render_add_ui
 
 
