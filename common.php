@@ -7,7 +7,7 @@ function get_form_tag()
     global $enable_debug;
     if ($enable_debug)
         return("<form><input type='hidden' name='debug' value='true'>");
-    return("<form method='post' action='${_SERVER['PHP_SELF']}'");
+    return("<form method='post' action='${_SERVER['PHP_SELF']}'>");
 } // get_form_tag
 
 
