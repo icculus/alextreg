@@ -58,10 +58,11 @@ function op_addtoken()
     {
         $sqlauthor = db_escape_string($_SERVER['REMOTE_USER']);
         $sqltokval = db_escape_string($tokval);
+        $sqlextid = db_escape_string($extid);
         // ok, add it to the database.
         $sql = "insert into alextreg_tokens" .  // !!! FIXME: Should have author associated with it!
                " (tokenname, tokenval, extid, author, entrydate, lastedit)" .
-               " values ('$sqltokname', $sqltokval, '$sqlauthor', NOW(), NOW())";
+               " values ('$sqltokname', $sqltokval, $sqlextid, '$sqlauthor', NOW(), NOW())";
         if (do_dbinsert($sql) == 1)
             echo "<font color='#00FF00'>Token added.</font><br>\n";
     } // if
