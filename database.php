@@ -48,6 +48,8 @@ function do_dbquery($sql, $link = NULL)
     if ($link == NULL)
         return(false);
 
+    write_debug("SQL query: [$sql]");
+
     $rc = mysql_query($sql, $link);
     if ($rc == false)
     {
