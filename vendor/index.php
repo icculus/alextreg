@@ -525,8 +525,8 @@ $operations['op_revaluetok'] = 'op_revaluetok';
 function op_revaluetok()
 {
     if (!welcome_here()) return;
-    if (!get_input_string('tokname', 'current token name', $tokname)) return;
-    if (!get_input_int('newval', 'new token name', $newval)) return;
+    if (!get_input_string('tokname', 'token name', $tokname)) return;
+    if (!get_input_int('newval', 'new token value', $newval)) return;
     if (!get_input_string('extname', 'extension name', $extname)) return;
     if (!get_input_int('extid', 'extension id', $extid)) return;
 
