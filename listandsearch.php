@@ -321,7 +321,7 @@ function show_one_extension($extrow)
         echo "  <li> (no entry points.)\n";
     else
     {
-        foreach ($tokens as $row)
+        foreach ($entrypoints as $row)
         {
             echo "  <li> ${row['entrypointname']}";
             //echo " added ${row['entrydate']},";
