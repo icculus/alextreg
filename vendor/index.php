@@ -290,7 +290,7 @@ function op_deltok()
     {
         $htmlextname = htmlentities($extname, ENT_QUOTES);
         $htmltokname = htmlentities($tokname, ENT_QUOTES);
-        echo "About to delete an token named '$htmlentname'<br>\n";
+        echo "About to delete an token named '$htmltokname'<br>\n";
         echo "<b><font size='+1'>\n";
         echo "THERE IS NO UNDELETE. MAKE SURE YOU <u>REALLY</u> WANT TO DO THIS.<br>\n";
         echo "</font></b>\n";
@@ -304,7 +304,7 @@ function op_deltok()
         echo "<input type='submit' name='form_submit' value='Confirm'>\n";
         echo "</form>\n";
     } // else
-} // op_delent
+} // op_deltok
 
 
 $operations['op_delent'] = 'op_delent';
