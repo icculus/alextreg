@@ -72,6 +72,48 @@ function op_renderpapertrail()
 } // op_renderpapertrail
 
 
+function update_vendor_login($loginname, $pw);
+{
+    $action = 'Added';
+    $users = file("./.htpasswd");
+
+    if (!isset($users))
+    {
+        write_error("failed to read vendor list.");
+        return;
+    } // if
+
+    if (!copy('./.htpasswd', '.htpasswd_knowngood'))
+    {
+        write_error("couldn't archive old vendor list.");
+        return;
+    } // if
+
+    $io = @fopen('./.htpasswd', 'w');
+    if (!$io)
+    {
+        write_error("failed to write vendor list.");
+        return;
+    } // if
+
+    foreach ($users as $u)
+    {
+        $chop = str_replace(strchr($u, ':'), "", $u);
+        if ($chop == $loginname)
+        {
+            $action = 'Updated';
+            continue;  // skip login we're updating.
+        } // if
+
+        fputs($io, $u);
+    } // for
+
+    // add in new or updated login.
+    fputs($io, "${loginname}:${cryptedpw}\n");
+    update_papertrail("$action login for vendor '$loginname'", '', false);
+} // update_vendor_login
+
+
 $operations['op_confirmpw'] = 'op_confirmpw';
 function op_confirmpw()
 {
@@ -85,7 +127,7 @@ function op_confirmpw()
         return;
     } // if
 
-    write_error("change the password to '$pw1', fool.");
+    update_vendor_login($_SERVER['REMOTE_USER'], $pw1);
 } // op_confirmpw
 
 
@@ -125,7 +167,7 @@ function op_confirmaddvendor()
         return;
     } // if
 
-    write_error("add a user named '$loginname', password '$pw1', fool.");
+    update_vendor_login($loginname, $pw1);
 } // op_confirmaddvendor
 
 
