@@ -28,7 +28,7 @@ function op_addtoken()
 
     // see if it's already in the database...
     $sqltokname = db_escape_string($tokname);
-    $sql = 'select tok.*, ext.extname from alextreg_tokens as tok'
+    $sql = 'select tok.*, ext.extname from alextreg_tokens as tok' .
            ' left outer join alextreg_extensions as ext' .
            ' on tok.extid=ext.id' .
            " where (tok.tokenname='$sqltokname') or (tok.tokenval=$tokval)";
