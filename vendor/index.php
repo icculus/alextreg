@@ -72,8 +72,10 @@ function op_renderpapertrail()
 } // op_renderpapertrail
 
 
-function update_vendor_login($loginname, $pw)
+function update_vendor_login($loginname, $pw, $allowreplace)
 {
+    if (!welcome_here()) return;
+
     $action = 'Added';
     $users = file("./.htpasswd");
 
@@ -81,6 +83,27 @@ function update_vendor_login($loginname, $pw)
     {
         write_error("failed to read vendor list.");
         return;
+    } // if
+
+    $cmd = escapeshellcmd("htpasswd -b -n $loginname $pw");
+    $cryptedpw = system($cmd);
+    if ($cryptedpw == false)
+    {
+        write_error("Can't crypt password");
+        return;
+    } // if
+
+    if (!$allowreplace)
+    {
+        foreach ($users as $u)
+        {
+            $chop = str_replace(strchr($u, ':'), "", $u);
+            if ($chop == $loginname)
+            {
+                write_error("Username already exists.");
+                return;
+            } // if
+        } // foreach
     } // if
 
     if (!copy('./.htpasswd', '.htpasswd_knowngood'))
@@ -127,7 +150,7 @@ function op_confirmpw()
         return;
     } // if
 
-    update_vendor_login($_SERVER['REMOTE_USER'], $pw1);
+    update_vendor_login($_SERVER['REMOTE_USER'], $pw1, true);
 } // op_confirmpw
 
 
@@ -167,7 +190,7 @@ function op_confirmaddvendor()
         return;
     } // if
 
-    update_vendor_login($loginname, $pw1);
+    update_vendor_login($loginname, $pw1, false);
 } // op_confirmaddvendor
 
 
