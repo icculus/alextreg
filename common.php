@@ -83,7 +83,7 @@ function get_input_string($reqname, $reqtype, &$reqval)
 function get_input_bool($reqname, $reqtype, &$reqval)
 {
     $tmp = '';
-    if (!get_input_string($reqname, $reqtype, $tmp))
+    if (!get_input_sanitized($reqname, $reqtype, $tmp))
         return false;
 
     $tmp = strupper($tmp);
@@ -103,6 +103,7 @@ function get_input_bool($reqname, $reqtype, &$reqval)
         return true;
     } // if
 
+    write_error("$reqtype is not true or false");
     return false;
 } // get_input_bool
 
