@@ -210,7 +210,8 @@ function show_one_extension($extrow)
     $extname = $extrow['extname'];
     $extid = $extrow['id'];
     $wikiurl = get_alext_wiki_url($extname);
-    echo "<p>$extname (<a href='${wikiurl}'>docs</a>)\n";
+    $htmlextname = htmlentities($extname, ENT_QUOTES);
+    echo "<p>$htmlextname (<a href='${wikiurl}'>docs</a>)\n";
     echo "<p>Tokens:\n<ul>\n";
 
     $sql = 'select * from alextreg_tokens as tok' .
@@ -243,6 +244,7 @@ function show_one_extension($extrow)
         echo "Add a new token named <input type='text' name='tokname'>\n";
         echo "with the value <input type='text' name='tokval'>.\n";
         echo "<input type='hidden' name='extid' value='$extid'>\n";
+        echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
         echo "<input type='hidden' name='operation' value='op_addtoken'>\n";
         echo "<input type='submit' name='form_submit' value='Go!'>\n";
         echo "</form>\n";
@@ -279,6 +281,7 @@ function show_one_extension($extrow)
         echo "  <li>\n<form>\n";
         echo "Add a new entry point named <input type='text' name='entrypointname'>\n";
         echo "<input type='hidden' name='extid' value='$extid'>\n";
+        echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
         echo "<input type='hidden' name='operation' value='op_addentrypoint'>\n";
         echo "<input type='submit' name='form_submit' value='Go!'>\n";
         echo "</form>\n";
@@ -299,16 +302,8 @@ function op_findall()
 } // op_findall
 
 
-$operations['op_showext'] = 'op_showext';
-function op_showext()
+function do_showext($extname)
 {
-    $extname = $_REQUEST['extname'];
-    if (empty($extname))
-    {
-        write_error('No extension specified.');
-        return;
-    } // if
-
     $sqlextname = db_escape_string($extname);
     $sql = "select * from alextreg_extensions" .
            " where extname='$sqlextname'";
@@ -329,6 +324,20 @@ function op_showext()
     } // else
 
     db_free_result($query);
+} // do_showext
+
+
+$operations['op_showext'] = 'op_showext';
+function op_showext()
+{
+    $extname = $_REQUEST['extname'];
+    if (empty($extname))
+    {
+        write_error('No extension specified.');
+        return;
+    } // if
+
+    do_showext($extname);
 } // op_showext
 
 

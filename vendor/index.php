@@ -28,6 +28,13 @@ function op_addtoken()
         return;
     } // if
 
+    $extname = $_REQUEST['extname'];
+    if (empty($extname))
+    {
+        write_error('No extension name specified.');
+        return;
+    } // if
+
     $tokval = $_REQUEST['tokval'];
     if (empty($tokval))
     {
@@ -64,11 +71,15 @@ function op_addtoken()
                " (tokenname, tokenval, extid, author, entrydate, lastedit)" .
                " values ('$sqltokname', $sqltokval, $sqlextid, '$sqlauthor', NOW(), NOW())";
         if (do_dbinsert($sql) == 1)
+        {
             echo "<font color='#00FF00'>Token added.</font><br>\n";
+            do_showext($extname);
+        } // if
     } // if
     else   // put out a confirmation...
     {
-        $htmlextid= htmlentities($extid, ENT_QUOTES);
+        $htmlextid = htmlentities($extid, ENT_QUOTES);
+        $htmlextname = htmlentities($extname, ENT_QUOTES);
         $htmltokname = htmlentities($tokname, ENT_QUOTES);
         $htmltokval = htmlentities($tokval, ENT_QUOTES);
 
@@ -84,6 +95,7 @@ function op_addtoken()
         echo "<input type='hidden' name='tokname' value='$htmltokname'>\n";
         echo "<input type='hidden' name='tokval' value='$htmltokval'>\n";
         echo "<input type='hidden' name='extid' value='$htmlextid'>\n";
+        echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
         echo "<input type='hidden' name='iamsure' value='${_SERVER['REMOTE_ADDR']}'>\n";
         echo "<input type='submit' name='form_submit' value='Confirm'>\n";
         echo "</form>\n";
@@ -111,6 +123,13 @@ function op_addentrypoint()
     if (empty($extid))
     {
         write_error('No extension id specified.');
+        return;
+    } // if
+
+    $extname = $_REQUEST['extname'];
+    if (empty($extname))
+    {
+        write_error('No extension name specified.');
         return;
     } // if
 
@@ -142,12 +161,16 @@ function op_addentrypoint()
                " (entrypointname, extid, author, entrydate, lastedit)" .
                " values ('$sqlentname', $sqlextid, '$sqlauthor', NOW(), NOW())";
         if (do_dbinsert($sql) == 1)
+        {
             echo "<font color='#00FF00'>Entry point added.</font><br>\n";
+            do_showext($extname);
+        } // if
     } // if
     else   // put out a confirmation...
     {
         $htmlextid= htmlentities($extid, ENT_QUOTES);
         $htmlentname = htmlentities($entname, ENT_QUOTES);
+        $htmlextname = htmlentities($extname, ENT_QUOTES);
 
         echo "About to add an entry point named '$htmlentname'<br>\n";
         echo "...if you're sure, click 'Confirm'...<br>\n";
@@ -155,6 +178,7 @@ function op_addentrypoint()
         echo "<input type='hidden' name='operation' value='op_addentrypoint'>\n";
         echo "<input type='hidden' name='entrypointname' value='$htmlentname'>\n";
         echo "<input type='hidden' name='extid' value='$htmlextid'>\n";
+        echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
         echo "<input type='hidden' name='iamsure' value='${_SERVER['REMOTE_ADDR']}'>\n";
         echo "<input type='submit' name='form_submit' value='Confirm'>\n";
         echo "</form>\n";
