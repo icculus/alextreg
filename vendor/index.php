@@ -645,7 +645,7 @@ function render_add_ui()
 ...or...
 
 <p>
-<form method="post" action="${_SERVER['PHP_SELF']}">
+<form action="${_SERVER['PHP_SELF']}">
   <b>Vendor:</b>
   I want to add a new extension
   named <input type="text" name="wantname" value="">.

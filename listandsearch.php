@@ -479,7 +479,7 @@ function render_search_ui()
 Where do you want to go today?
 
 <p>
-<form method="post" action="${_SERVER['PHP_SELF']}">
+<form action="${_SERVER['PHP_SELF']}">
   I want a list of all known
   <select name="wanttype" size="1">
     <option selected value="extension">extensions</option>
@@ -494,7 +494,7 @@ Where do you want to go today?
 ...or...
 
 <p>
-<form method="post" action="${_SERVER['PHP_SELF']}">
+<form action="${_SERVER['PHP_SELF']}">
   I want
   <select name="wanttype" size="1">
     <option selected value="extension">an extension</option>
