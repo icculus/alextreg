@@ -220,7 +220,7 @@ function show_one_extension($extrow)
     if ($query == false)
         return;  // uh...?
     else if (db_num_rows($query) == 0)
-        echo "  <li> (no new tokens.)\n";
+        echo "  <li> (no tokens.)\n";
     else
     {
         while ( ($row = db_fetch_array($query)) != false )
@@ -237,6 +237,7 @@ function show_one_extension($extrow)
     {
         echo "  <li>\n<form>\n";
         echo "Add a new token named <input type='text' name='wantname'>\n";
+        echo "with the value <input type='text' name='tokval'>.\n";
         echo "<input type='hidden' name='extid' value='$extid'>\n";
         echo "<input type='hidden' name='operation' value='op_addtoken'>\n";
         echo "<input type='submit' name='form_submit' value='Go!'>\n";
@@ -257,7 +258,7 @@ function show_one_extension($extrow)
     if ($query == false)
         return;  // uh...?
     else if (db_num_rows($query) == 0)
-        echo "  <li> (no new entry points.)\n";
+        echo "  <li> (no entry points.)\n";
     else
     {
         while ( ($row = db_fetch_array($query)) != false )

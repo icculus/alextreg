@@ -14,16 +14,103 @@ function op_addtoken()
         return;
     } // if
 
-    $wantname = $_REQUEST['wantname'];
-    if (empty($wantname))
+    $tokname = $_REQUEST['tokname'];
+    if (empty($tokname))
     {
         write_error('No token name specified.');
         return;
     } // if
 
+    $extid = $_REQUEST['extid'];
+    if (empty($extid))
+    {
+        write_error('No extension id specified.');
+        return;
+    } // if
+
+    $tokval = $_REQUEST['tokval'];
+    if (empty($tokval))
+    {
+        write_error('No token value specified.');
+        return;
+    } // if
+
+    // see if it's already in the database...
+    $sqltokname = db_escape_string($tokname);
+    $sql = "select id from alextreg_tokens where tokenname='$sqltokname'";
+    $query = do_dbquery($sql);
+    if ($query == false)
+        return;  // error output is handled in database.php ...
+
+    if (db_num_rows($query) > 0)
+    {
+        write_error('This token name is in use. Below is what a search turned up.');
+        render_token_list($tokname, $query);
+        db_free_result($query);
+        return;
+    } // if
+
+    db_free_result($query);
+
+    // Just a small sanity check.
+    $cookie = $_REQUEST['iamsure'];
+    if ((!empty($cookie)) and ($cookie == $_SERVER['REMOTE_ADDR']))
+    {
+        $sqlauthor = db_escape_string($_SERVER['REMOTE_USER']);
+        $sqltokval = db_escape_string($tokval);
+        // ok, add it to the database.
+        $sql = "insert into alextreg_tokens" .  // !!! FIXME: Should have author associated with it!
+               " (tokenname, tokenval, extid, author, entrydate, lastedit)" .
+               " values ('$sqltokname', $sqltokval, '$sqlauthor', NOW(), NOW())";
+        if (do_dbinsert($sql) == 1)
+            echo "<font color='#00FF00'>Token added.</font><br>\n";
+    } // if
+    else   // put out a confirmation...
+    {
+        $htmlname = htmlentities($tokname, ENT_QUOTES);
+        $htmltokname = htmlentities($tokname, ENT_QUOTES);
+        $htmltokval = htmlentities($tokval, ENT_QUOTES);
+        echo "About to add an extension named $htmlname.<br>\n";
+        echo "You can add tokens and entry points to this extension in a moment.<br>\n";
+        echo "...if you're sure, click 'Confirm'...<br>\n";
+        echo "<form>\n";
+        echo "<input type='hidden' name='tokname' value='$htmlname'>\n";
+        echo "<input type='hidden' name='operation' value='op_addtoken'>\n";
+        echo "<input type='hidden' name='tokname' value='$htmltokname'>\n";
+        echo "<input type='hidden' name='tokval' value='$htmltokval'>\n";
+        echo "<input type='hidden' name='iamsure' value='${_SERVER['REMOTE_ADDR']}'>\n";
+        echo "<input type='submit' name='form_submit' value='Confirm'>\n";
+        echo "</form>\n";
+    } // else
+} // op_addtoken
+
+
+$operations['op_addentrypoint'] = 'op_addentrypoint';
+function op_addentrypoint()
+{
+    if (!is_authorized_vendor())
+    {
+        write_error("You shouldn't be here!");
+        return;
+    } // if
+
+    $wantname = $_REQUEST['wantname'];
+    if (empty($wantname))
+    {
+        write_error('No entry point name specified.');
+        return;
+    } // if
+
+    $extid = $_REQUEST['extid'];
+    if (empty($extid))
+    {
+        write_error('No extension id specified.');
+        return;
+    } // if
+
     // see if it's already in the database...
     $sqlwantname = db_escape_string($wantname);
-    $sql = "select id from alextreg_tokens where tokenname='$sqlwantname'";
+    $sql = "select id from alextreg_entrypoints where entrypointname='$sqlwantname'";
     $query = do_dbquery($sql);
     if ($query == false)
         return;  // error output is handled in database.php ...
@@ -44,10 +131,11 @@ function op_addtoken()
     {
         $sqlauthor = db_escape_string($_SERVER['REMOTE_USER']);
         // ok, add it to the database.
-        $sql = "insert into alextreg_tokens" .  // !!! FIXME: Should have author associated with it!
-               " (tokenname, tokenval, extid, entrydate, lastedit)" .
-               " values ('$sqlwantname', aASAd, NOW(), NOW())";
-        do_dbinsert($sql);
+        $sql = "insert into alextreg_entrypoints" .  // !!! FIXME: Should have author associated with it!
+               " (entrypointname, extid, author, entrydate, lastedit)" .
+               " values ('$sqlwantname', $extid, '$sqlauthor', NOW(), NOW())";
+        if (do_dbinsert($sql) == 1)
+            echo "<font color='#00FF00'>Entry point added.</font><br>\n";
     } // if
     else   // put out a confirmation...
     {
@@ -63,6 +151,7 @@ function op_addtoken()
         echo "</form>\n";
     } // else
 } // op_addtoken
+
 
 
 $operations['op_addextension'] = 'op_addextension';
@@ -107,7 +196,8 @@ function op_addextension()
         $sql = "insert into alextreg_extensions" .
                " (extname, flags, author, entrydate, lastedit)" .
                " values ('$sqlwantname', 0, '$sqlauthor', NOW(), NOW())";
-        do_dbinsert($sql);
+        if (do_dbinsert($sql) == 1)
+            echo "<font color='#00FF00'>Extension added.</font><br>\n";
     } // if
     else   // put out a confirmation...
     {
