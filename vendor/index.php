@@ -79,7 +79,7 @@ function op_confirmpw()
     if (!get_input_string('pw1', 'new password', $pw1)) return;
     if (!get_input_string('pw2', 'retyped password', $pw2)) return;
 
-    if (pw1 != pw2)
+    if ($pw1 != $pw2)
     {
         write_error("passwords don't match");
         return;
@@ -109,6 +109,50 @@ function op_changepw()
 
 EOF;
 } // op_changepw
+
+
+$operations['op_confirmaddvendor'] = 'op_confirmaddvendor';
+function op_confirmaddvendor()
+{
+    if (!welcome_here()) return;
+    if (!get_input_string('loginname', 'new login name', $loginname)) return;
+    if (!get_input_string('pw1', 'new password', $pw1)) return;
+    if (!get_input_string('pw2', 'retyped password', $pw2)) return;
+
+    if ($pw1 != $pw2)
+    {
+        write_error("passwords don't match");
+        return;
+    } // if
+
+    write_error("add a user named '$loginname', password '$pw1', fool.");
+} // op_confirmaddvendor
+
+
+$operations['op_addvendor'] = 'op_addvendor';
+function op_addvendor()
+{
+    if (!welcome_here()) return;
+
+    $form = get_form_tag();
+
+    echo <<< EOF
+    <h1><u>Adding a vendor login</u></h1>
+
+    <p>
+    Usernames should be in the form of first_last_vendorname.
+
+    <p>
+    ${form}
+    New login name: <input type='text' name='loginname' value=''><br>
+    New password: <input type='password' name='pw1' value=''><br>
+    Retype new password: <input type='password' name='pw2' value=''><br>
+    <input type='hidden' name='operation' value='op_confirmaddvendor'>
+    <input type='submit' name='form_submit' value='Add'>
+    </form>
+
+EOF;
+} // op_addvendor
 
 
 $operations['op_addtoken'] = 'op_addtoken';
