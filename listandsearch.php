@@ -188,9 +188,9 @@ Where do you want to go today?
 <form method="post" action="${_SERVER['PHP_SELF']}">
   I want a list of all known
   <select name="wanttype" size="1">
-    <option selected value="extensions">extensions</option>
-    <option value="tokennames">tokens</option>
-    <option value="entrypoints">entry points</option>
+    <option selected value="extension">extensions</option>
+    <option value="tokenname">tokens</option>
+    <option value="entrypoint">entry points</option>
   </select>.
   <input type="hidden" name="operation" value="op_findall">
   <input type="submit" name="form_submit" value="Go!">
