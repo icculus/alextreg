@@ -60,6 +60,8 @@ function render_entrypoint_list($wantname, $query)
 $queryfuncs['extension'] = 'find_extension';
 function find_extension($wantname)
 {
+    global $extflags_public;
+
     $sql = 'select extname from alextreg_extensions' .
            ' where (1=1)';
 
@@ -84,6 +86,8 @@ function find_extension($wantname)
 
 function find_token($additionalsql, $wantname)
 {
+    global $extflags_public;
+
     $sql = 'select tok.tokenname as tokenname,' .
            ' tok.tokenval as tokenval,' .
            ' ext.extname as extname' .
@@ -136,6 +140,8 @@ function find_tokenvalue($wantname)
 $queryfuncs['entrypoint'] = 'find_entrypoint';
 function find_entrypoint($wantname)
 {
+    global $extflags_public;
+
     $sql = 'select ent.entrypointname as entrypointname,' .
            ' ext.extname as extname' .
            ' from alextreg_entrypoints as ent' .
@@ -207,6 +213,8 @@ function op_findone()
 
 function show_one_extension($extrow)
 {
+    global $extflags_public;
+
     $extname = $extrow['extname'];
     $extid = $extrow['id'];
     $wikiurl = get_alext_wiki_url($extname);
@@ -306,6 +314,8 @@ function op_findall()
 
 function do_showext($extname)
 {
+    global $extflags_public;
+
     $sqlextname = db_escape_string($extname);
     $sql = "select * from alextreg_extensions" .
            " where extname='$sqlextname'";
