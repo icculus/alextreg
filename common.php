@@ -80,6 +80,33 @@ function get_input_string($reqname, $reqtype, &$reqval)
 } // get_input_string
 
 
+function get_input_bool($reqname, $reqtype, &$reqval)
+{
+    $tmp = '';
+    if (!get_input_string($reqname, $reqtype, $tmp))
+        return false;
+
+    $tmp = strupper($tmp);
+    if (($tmp == 'Y') || ($tmp == 'YES') ||
+        ($tmp == 'T') || ($tmp == 'TRUE') ||
+        ($tmp == '1'))
+    {
+        $reqval = 1;
+        return true;
+    } // if
+
+    if (($tmp == 'N') || ($tmp == 'NO') ||
+        ($tmp == 'F') || ($tmp == 'FALSE') ||
+        ($tmp == '0'))
+    {
+        $reqval = 0;
+        return true;
+    } // if
+
+    return false;
+} // get_input_bool
+
+
 function get_input_number($reqname, $reqtype, &$reqval)
 {
     if (!get_input_sanitized($reqname, $reqtype, $reqval))
