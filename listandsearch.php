@@ -320,6 +320,44 @@ function show_one_extension($extrow)
             echo "<input type='hidden' name='operation' value='op_deltok'>\n";
             echo "<input type='submit' name='form_submit' value='Go!'>\n";
             echo "</form>\n";
+
+            echo "<form>\n";
+            echo "I want to change the\n";
+            echo "<select name='operation' size='1'>\n";
+            echo "  <option value='op_renametok'>name</option>\n";
+            echo "  <option value='op_revaluetok'>value</option>\n";
+            echo "</select>\n";
+            echo "of the token named\n";
+            echo "<select name='tokname' size='1'>\n";
+            echo "  <option value=''>...</option>\n";
+            foreach ($tokens as $row)
+            {
+                $name = htmlentities($row['tokenname'], ENT_QUOTES);
+                echo "  <option value='$name'>$name</option>\n";
+            } // foreach
+            echo "</select>\n";
+            echo "to <input type='text' name='newval' value=''>.\n";
+            echo "<input type='hidden' name='extid' value='$extid'>\n";
+            echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
+            echo "<input type='submit' name='form_submit' value='Go!'>\n";
+            echo "</form>\n";
+
+            echo "<form>\n";
+            echo "I want to change the name of the entry point named\n";
+            echo "<select name='entname' size='1'>\n";
+            echo "  <option value=''>...</option>\n";
+            foreach ($entrypoints as $row)
+            {
+                $name = htmlentities($row['entrypointname'], ENT_QUOTES);
+                echo "  <option value='$name'>$name</option>\n";
+            } // foreach
+            echo "</select>\n";
+            echo "to <input type='text' name='newval' value=''>.\n";
+            echo "<input type='hidden' name='extid' value='$extid'>\n";
+            echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
+            echo "<input type='hidden' name='operation' value='op_renameent'>\n";
+            echo "<input type='submit' name='form_submit' value='Go!'>\n";
+            echo "</form>\n";
         } // if
 
         if (count($entrypoints))

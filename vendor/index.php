@@ -390,7 +390,198 @@ function op_renameext()
         echo "<input type='submit' name='form_submit' value='Confirm'>\n";
         echo "</form>\n";
     } // else
-} // op_showhideext
+} // op_renameext
+
+
+$operations['op_renameent'] = 'op_renameent';
+function op_renameent()
+{
+    if (!welcome_here()) return;
+    if (!get_input_string('entname', 'current entrypoint name', $entname)) return;
+    if (!get_input_string('newval', 'new entrypoint name', $newval)) return;
+    if (!get_input_string('extname', 'extension name', $extname)) return;
+    if (!get_input_int('extid', 'extension id', $extid)) return;
+
+    // see if it's already in the database...
+    $sqlnewval = db_escape_string($newval);
+    $sql = 'select * from alextreg_entrypoints' .
+           " where (entrypointname='$sqlnewval')";
+    $query = do_dbquery($sql);
+    if ($query == false)
+        return;  // error output is handled in database.php ...
+
+    if (db_num_rows($query) > 0)
+    {
+        write_error('The new entry point is in use. Below is what a search turned up.');
+        render_entrypoint_list($newval, $query);
+        db_free_result($query);
+        return;
+    } // if
+    db_free_result($query);
+
+    // Just a small sanity check.
+    $cookie = $_REQUEST['iamsure'];
+    if ((!empty($cookie)) and ($cookie == $_SERVER['REMOTE_ADDR']))
+    {
+        $sqlentname = db_escape_string($entname);
+        $sqlauthor = db_escape_string($_SERVER['REMOTE_USER']);
+        // ok, nuke it.
+        $sql = "update alextreg_entrypoints set entrypointname='$sqlnewval'," .
+               " lastedit=NOW(), lasteditauthor='$sqlauthor'" .
+               " where entrypointname='$sqlentname'";
+        if (do_dbupdate($sql) == 1)
+        {
+            echo "<font color='#00FF00'>Entry point updated.</font><br>\n";
+            $sql = "update alextreg_extensions set lastedit=NOW(), lasteditauthor='$sqlauthor' where id=$extid";
+            do_dbupdate($sql);
+            do_showext($extname);
+        } // if
+    } // if
+    else   // put out a confirmation...
+    {
+        $htmlnewval = htmlentities($newval, ENT_QUOTES);
+        $htmlextname = htmlentities($extname, ENT_QUOTES);
+        $htmlentname = htmlentities($entname, ENT_QUOTES);
+        echo "About to rename an entry point named '$htmlentname' to '$htmlnewval'.<br>\n";
+        echo "...if you're sure, click 'Confirm'...<br>\n";
+        echo "<form>\n";
+        echo "<input type='hidden' name='iamsure' value='${_SERVER['REMOTE_ADDR']}'>\n";
+        echo "<input type='hidden' name='extid' value='$extid'>\n";
+        echo "<input type='hidden' name='newval' value='$htmlnewval'>\n";
+        echo "<input type='hidden' name='entname' value='$htmlentname'>\n";
+        echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
+        echo "<input type='hidden' name='operation' value='op_renameent'>\n";
+        echo "<input type='submit' name='form_submit' value='Confirm'>\n";
+        echo "</form>\n";
+    } // else
+} // op_renameent
+
+
+$operations['op_renametok'] = 'op_renametok';
+function op_renametok()
+{
+    if (!welcome_here()) return;
+    if (!get_input_string('tokname', 'current token name', $tokname)) return;
+    if (!get_input_string('newval', 'new token name', $newval)) return;
+    if (!get_input_string('extname', 'extension name', $extname)) return;
+    if (!get_input_int('extid', 'extension id', $extid)) return;
+
+    // see if it's already in the database...
+    $sqlnewval = db_escape_string($newval);
+    $sql = 'select * from alextreg_tokens' .
+           " where (tokenname='$sqlnewval')";
+    $query = do_dbquery($sql);
+    if ($query == false)
+        return;  // error output is handled in database.php ...
+
+    if (db_num_rows($query) > 0)
+    {
+        write_error('The new token name is in use. Below is what a search turned up.');
+        render_token_list($newval, $query);
+        db_free_result($query);
+        return;
+    } // if
+    db_free_result($query);
+
+    // Just a small sanity check.
+    $cookie = $_REQUEST['iamsure'];
+    if ((!empty($cookie)) and ($cookie == $_SERVER['REMOTE_ADDR']))
+    {
+        $sqltokname = db_escape_string($tokname);
+        $sqlauthor = db_escape_string($_SERVER['REMOTE_USER']);
+        // ok, nuke it.
+        $sql = "update alextreg_tokens set tokenname='$sqlnewval'," .
+               " lastedit=NOW(), lasteditauthor='$sqlauthor'" .
+               " where tokenname='$sqltokname'";
+        if (do_dbupdate($sql) == 1)
+        {
+            echo "<font color='#00FF00'>Token updated.</font><br>\n";
+            $sql = "update alextreg_extensions set lastedit=NOW(), lasteditauthor='$sqlauthor' where id=$extid";
+            do_dbupdate($sql);
+            do_showext($extname);
+        } // if
+    } // if
+    else   // put out a confirmation...
+    {
+        $htmlnewval = htmlentities($newval, ENT_QUOTES);
+        $htmlextname = htmlentities($extname, ENT_QUOTES);
+        $htmltokname = htmlentities($tokname, ENT_QUOTES);
+        echo "About to rename a token named '$htmltokname' to '$htmlnewval'.<br>\n";
+        echo "...if you're sure, click 'Confirm'...<br>\n";
+        echo "<form>\n";
+        echo "<input type='hidden' name='iamsure' value='${_SERVER['REMOTE_ADDR']}'>\n";
+        echo "<input type='hidden' name='extid' value='$extid'>\n";
+        echo "<input type='hidden' name='newval' value='$htmlnewval'>\n";
+        echo "<input type='hidden' name='tokname' value='$htmltokname'>\n";
+        echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
+        echo "<input type='hidden' name='operation' value='op_renametok'>\n";
+        echo "<input type='submit' name='form_submit' value='Confirm'>\n";
+        echo "</form>\n";
+    } // else
+} // op_renametok
+
+
+$operations['op_revaluetok'] = 'op_revaluetok';
+function op_revaluetok()
+{
+    if (!welcome_here()) return;
+    if (!get_input_string('tokname', 'current token name', $tokname)) return;
+    if (!get_input_int('newval', 'new token name', $newval)) return;
+    if (!get_input_string('extname', 'extension name', $extname)) return;
+    if (!get_input_int('extid', 'extension id', $extid)) return;
+
+    // see if it's already in the database...
+    $sqlnewval = db_escape_string($newval);
+    $sql = "select * from alextreg_tokens where (tokenval=$newval)";
+    $query = do_dbquery($sql);
+    if ($query == false)
+        return;  // error output is handled in database.php ...
+
+    if (db_num_rows($query) > 0)
+    {
+        write_error('The new token value is in use. Below is what a search turned up.');
+        render_token_list($tokname, $query);
+        db_free_result($query);
+        return;
+    } // if
+    db_free_result($query);
+
+    // Just a small sanity check.
+    $cookie = $_REQUEST['iamsure'];
+    if ((!empty($cookie)) and ($cookie == $_SERVER['REMOTE_ADDR']))
+    {
+        $sqltokname = db_escape_string($tokname);
+        $sqlauthor = db_escape_string($_SERVER['REMOTE_USER']);
+        // ok, nuke it.
+        $sql = "update alextreg_tokens set tokenval=$newval," .
+               " lastedit=NOW(), lasteditauthor='$sqlauthor'" .
+               " where tokenname='$sqltokname'";
+        if (do_dbupdate($sql) == 1)
+        {
+            echo "<font color='#00FF00'>Token updated.</font><br>\n";
+            $sql = "update alextreg_extensions set lastedit=NOW(), lasteditauthor='$sqlauthor' where id=$extid";
+            do_dbupdate($sql);
+            do_showext($extname);
+        } // if
+    } // if
+    else   // put out a confirmation...
+    {
+        $htmlnewval = htmlentities($newval, ENT_QUOTES);
+        $htmlextname = htmlentities($extname, ENT_QUOTES);
+        $htmltokname = htmlentities($tokname, ENT_QUOTES);
+        echo "About to change the value of a token named '$htmltokname' to ${newval}${hex}.<br>\n";
+        echo "...if you're sure, click 'Confirm'...<br>\n";
+        echo "<form>\n";
+        echo "<input type='hidden' name='iamsure' value='${_SERVER['REMOTE_ADDR']}'>\n";
+        echo "<input type='hidden' name='extid' value='$extid'>\n";
+        echo "<input type='hidden' name='newval' value='$htmlnewval'>\n";
+        echo "<input type='hidden' name='tokname' value='$htmltokname'>\n";
+        echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
+        echo "<input type='hidden' name='operation' value='op_revaluetok'>\n";
+        echo "<input type='submit' name='form_submit' value='Confirm'>\n";
+        echo "</form>\n";
+    } // else
+} // op_revaluetok
 
 
 function render_add_ui()
