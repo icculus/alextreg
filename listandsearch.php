@@ -13,7 +13,7 @@ function render_extension_list($wantname, $query)
     if (($wantname) and ($count > 1))
         write_error('(Unexpected number of results from database!)');
 
-    print("<ul>\n");
+    print("Extensions:\n<ul>\n");
     while ( ($row = db_fetch_array($query)) != false )
     {
         $url = get_alext_url($row['extname']);
@@ -28,7 +28,7 @@ function render_token_list($wantname, $query)
     if (($wantname) and ($count > 1))
         write_error('(Unexpected number of results from database!)');
 
-    print("<ul>\n");
+    print("Tokens:\n<ul>\n");
     while ( ($row = db_fetch_array($query)) != false )
     {
         $url = get_alext_url($row['extname']);
@@ -46,7 +46,7 @@ function render_entrypoint_list($wantname, $query)
     if (($wantname) and ($count > 1))
         write_error('(Unexpected number of results from database!)');
 
-    print("<ul>\n");
+    print("Entry points:\n<ul>\n");
     while ( ($row = db_fetch_array($query)) != false )
     {
         $url = get_alext_url($row['extname']);
