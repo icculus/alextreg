@@ -92,7 +92,7 @@ function op_addtoken()
 
 
 $operations['op_addentrypoint'] = 'op_addentrypoint';
-function op_addtoken()
+function op_addentrypoint()
 {
     if (!is_authorized_vendor())
     {
