@@ -62,7 +62,7 @@ function do_dbquery($sql, $link = NULL)
 } // do_dbquery
 
 
-function do_dbinsert($sql, $expected_rows = 1, $link = NULL)
+function do_dbwrite($sql, $verb, $expected_rows = 1, $link = NULL)
 {
     if ($link == NULL)
         $link = get_dblink();
@@ -70,13 +70,14 @@ function do_dbinsert($sql, $expected_rows = 1, $link = NULL)
     if ($link == NULL)
         return(false);
 
-    write_debug("SQL insert: [$sql]");
+    write_debug("SQL $verb: [$sql]");
 
     $rc = mysql_query($sql, $link);
     if ($rc == false)
     {
         $err = mysql_error();
-        write_error("Problem in INSERT statement: {$err}");
+        $upperverb = strtoupper($verb);
+        write_error("Problem in $upperverb statement: {$err}");
         return(false);
     } // if
 
@@ -84,11 +85,23 @@ function do_dbinsert($sql, $expected_rows = 1, $link = NULL)
     if (($expected_rows >= 0) and ($retval != $expected_rows))
     {
         $err = mysql_error();
-        write_error("Database insertion error: {$err}");
+        write_error("Database $verb error: {$err}");
     } // if
 
     return($retval);
+} // do_dbwrite
+
+
+function do_dbinsert($sql, $expected_rows = 1, $link = NULL)
+{
+    return(do_dbwrite($sql, 'insert', $expected_rows, $link));
 } // do_dbinsert
+
+
+function do_dbupdate($sql, $expected_rows = 1, $link = NULL)
+{
+    return(do_dbwrite($sql, 'update', $expected_rows, $link));
+} // do_dbupdate
 
 
 function db_num_rows($query)
