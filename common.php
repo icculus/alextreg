@@ -86,17 +86,17 @@ function get_input_bool($reqname, $reqtype, &$reqval)
     if (!get_input_sanitized($reqname, $reqtype, $tmp))
         return false;
 
-    $tmp = strupper($tmp);
-    if (($tmp == 'Y') || ($tmp == 'YES') ||
-        ($tmp == 'T') || ($tmp == 'TRUE') ||
+    $tmp = strtolower($tmp);
+    if (($tmp == 'y') || ($tmp == 'yes') ||
+        ($tmp == 't') || ($tmp == 'true') ||
         ($tmp == '1'))
     {
         $reqval = 1;
         return true;
     } // if
 
-    if (($tmp == 'N') || ($tmp == 'NO') ||
-        ($tmp == 'F') || ($tmp == 'FALSE') ||
+    if (($tmp == 'n') || ($tmp == 'no') ||
+        ($tmp == 'f') || ($tmp == 'false') ||
         ($tmp == '0'))
     {
         $reqval = 0;
