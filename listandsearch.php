@@ -262,9 +262,9 @@ function op_showext()
         return;
     } // if
 
-    $sqlwantname = db_escape_string($wantname);
+    $sqlextname = db_escape_string($extname);
     $sql = "select * from alextreg_extensions" .
-           " where extname='$sqlwantname'";
+           " where extname='$sqlextname'";
 
     $query = do_dbquery($sql);
     if ($query == false)
