@@ -55,7 +55,7 @@ function op_addtoken()
         if (do_dbinsert($sql) == 1)
         {
             echo "<font color='#00FF00'>Token added.</font><br>\n";
-            $sql = "update alextreg_extensions set lastedit=NOW(), lasteditauth='$sqlauthor' where id=$extid";
+            $sql = "update alextreg_extensions set lastedit=NOW(), lasteditauthor='$sqlauthor' where id=$extid";
             do_dbupdate($sql);
             do_showext($extname);
         } // if
