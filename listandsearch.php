@@ -44,7 +44,7 @@ function find_token($additionalsql, $wantname)
 {
     $sql = 'select tok.tokenname as tokenname,' .
            ' tok.tokenval as tokenval,' .
-           ' ext.id as extid' .
+           ' ext.extname as extname' .
            ' from alextreg_tokens as tok' .
            ' left outer join alextreg_extensions as ext' .
            ' on tok.extid=ext.id' .
@@ -62,7 +62,7 @@ function find_token($additionalsql, $wantname)
         print("<ul>\n");
         while ( ($row = db_fetch_array($query)) != false )
         {
-            $url = get_alext_wiki_url($row['extid']);
+            $url = get_alext_wiki_url($row['extname']);
             $hex = sprintf("0x%X", $row['tokenval']);  // !!! FIXME: faster way to do this?
             print("  <li>${row['tokenname']} ($hex)");
             print(" from <a href='$url'>${row['extname']}</a>\n");
@@ -99,20 +99,54 @@ function find_tokenvalue($wantname)
     } // if
 
     find_token($additionalsql, $wantname);
-} // find_tokenname
+} // find_tokenvalue
 
 
 $queryfuncs['entrypoint'] = 'find_entrypoint';
 function find_entrypoint($wantname)
 {
-    write_error('Not implemented.');  // !!! FIXME
+    $sql = 'select ent.entrypointname as entrypointname,' .
+           ' ext.extname as extname' .
+           ' from alextreg_entrypoints as ent' .
+           ' left outer join alextreg_extensions as ext' .
+           ' on ent.extid=ext.id';
+
+    if ($wantname)
+    {
+        $sqlwantname = db_escape_string($wantname);
+        $sql .= " where ent.entrypointname='$sqlwantname'";
+    } // if
+
+    $query = do_dbquery($sql);
+    if ($query == false)
+        return;  // error output is handled in database.php ...
+    else
+    {
+        $count = db_num_rows($query);
+        if (($wantname) and ($count > 1))
+            write_error('(Unexpected number of results from database!)');
+
+        print("<ul>\n");
+        while ( ($row = db_fetch_array($query)) != false )
+        {
+            $url = get_alext_wiki_url($row['extname']);
+            print("  <li>${row['entrypointname']} ");
+            print(" from <a href='$url'>${row['extname']}</a>\n");
+        } // while
+        print("</ul>\n<p>Total results: $count\n");
+    } // else
+
+    db_free_result($query);
 } // find_entrypoint
 
 
 $queryfuncs['anything'] = 'find_anything';
 function find_anything($wantname)
 {
-    write_error('Not implemented.');  // !!! FIXME
+    find_extension($wantname);
+    find_tokenname($wantname);
+    find_tokenvalue($wantname);
+    find_entrypoint($wantname);
 } // find_anything
 
 
