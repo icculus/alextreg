@@ -9,7 +9,7 @@ if (not defined $ENV{'REMOTE_USER'}) {
     exit 1;
 }
 
-exec '../wiki/wiki.pl';
+exec '../../wiki/wiki.pl';
 print "Content-type: text/plain\n\n";
 print "exec failed: $!\n";
 exit 1;
