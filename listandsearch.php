@@ -296,6 +296,38 @@ function show_one_extension($extrow)
         echo "<input type='submit' name='form_submit' value='Go!'>\n";
         echo "</form>\n";
 
+        if (count($tokens))
+        {
+            echo "<form>\n";
+            echo "I want to delete the token named\n";
+            echo "<select name='tokname' size='1'>\n";
+            echo "  <option value=''>...</option>\n";
+            foreach ($tokens as $row)
+                echo "  <option value='${row['id']}'>${row['tokenname']}</option>\n";
+            echo "</select>\n";
+            echo "<input type='hidden' name='extid' value='$extid'>\n";
+            echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
+            echo "<input type='hidden' name='operation' value='op_deltok'>\n";
+            echo "<input type='submit' name='form_submit' value='Go!'>\n";
+            echo "</form>\n";
+        } // if
+
+        if (count($entrypoints))
+        {
+            echo "<form>\n";
+            echo "I want to delete the entry point named\n";
+            echo "<select name='entname' size='1'>\n";
+            echo "  <option value=''>...</option>\n";
+            foreach ($tokens as $row)
+                echo "  <option value='${row['entrypointname']}'>${row['entrypointname']}</option>\n";
+            echo "</select>\n";
+            echo "<input type='hidden' name='extid' value='$extid'>\n";
+            echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
+            echo "<input type='hidden' name='operation' value='op_delent'>\n";
+            echo "<input type='submit' name='form_submit' value='Go!'>\n";
+            echo "</form>\n";
+        } // if
+
         echo "</td></tr></table>\n";
     } // if
 
@@ -312,7 +344,7 @@ function show_one_extension($extrow)
             //echo " added ${row['entrydate']},";
             //echo " last modified ${row['lastedit']}";
             echo "\n";
-        } // while
+        } // foreach
     } // else
     echo "</ul>\n";
 
@@ -327,7 +359,7 @@ function show_one_extension($extrow)
             //echo " added ${row['entrydate']},";
             //echo " last modified ${row['lastedit']}";
             echo "\n";
-        } // while
+        } // foreach
     } // else
 
     echo "</ul>\n";

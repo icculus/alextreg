@@ -259,7 +259,97 @@ function op_delext()
         echo "<input type='submit' name='form_submit' value='Confirm'>\n";
         echo "</form>\n";
     } // else
-} // op_showhideext
+} // op_delext
+
+
+$operations['op_deltok'] = 'op_deltok';
+function op_deltok()
+{
+    if (!welcome_here()) return;
+    if (!get_input_string('tokname', 'token name', $tokname)) return;
+    if (!get_input_string('extname', 'extension name', $extname)) return;
+    if (!get_input_int('extid', 'extension id', $extid)) return;
+
+    // Just a small sanity check.
+    $cookie = $_REQUEST['iamsure'];
+    if ((!empty($cookie)) and ($cookie == $_SERVER['REMOTE_ADDR']))
+    {
+        $sqltokname = db_escape_string($tokname);
+        $sqlauthor = db_escape_string($_SERVER['REMOTE_USER']);
+        // ok, nuke it.
+        $sql = "delete from alextreg_tokens where tokname='$sqltokname'";
+        if (do_dbdelete($sql) == 1)
+        {
+            echo "<font color='#00FF00'>TOKEN DELETED!</font><br>\n";
+            $sql = "update alextreg_extensions set lastedit=NOW(), lasteditauthor='$sqlauthor' where id=$extid";
+            do_dbupdate($sql);
+            do_showext($extname);
+        } // if
+    } // if
+    else   // put out a confirmation...
+    {
+        $htmlextname = htmlentities($extname, ENT_QUOTES);
+        $htmltokname = htmlentities($tokname, ENT_QUOTES);
+        echo "About to delete an token named '$htmlentname'<br>\n";
+        echo "<b><font size='+1'>\n";
+        echo "THERE IS NO UNDELETE. MAKE SURE YOU <u>REALLY</u> WANT TO DO THIS.<br>\n";
+        echo "</font></b>\n";
+        echo "...if you're sure, click 'Confirm'...<br>\n";
+        echo "<form>\n";
+        echo "<input type='hidden' name='extid' value='$extid'>\n";
+        echo "<input type='hidden' name='tokname' value='$htmltokname'>\n";
+        echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
+        echo "<input type='hidden' name='operation' value='op_deltok'>\n";
+        echo "<input type='hidden' name='iamsure' value='${_SERVER['REMOTE_ADDR']}'>\n";
+        echo "<input type='submit' name='form_submit' value='Confirm'>\n";
+        echo "</form>\n";
+    } // else
+} // op_delent
+
+
+$operations['op_delent'] = 'op_delent';
+function op_delent()
+{
+    if (!welcome_here()) return;
+    if (!get_input_string('entname', 'entry point name', $entname)) return;
+    if (!get_input_string('extname', 'extension name', $extname)) return;
+    if (!get_input_int('extid', 'extension id', $extid)) return;
+
+    // Just a small sanity check.
+    $cookie = $_REQUEST['iamsure'];
+    if ((!empty($cookie)) and ($cookie == $_SERVER['REMOTE_ADDR']))
+    {
+        $sqlentname = db_escape_string($entname);
+        $sqlauthor = db_escape_string($_SERVER['REMOTE_USER']);
+        // ok, nuke it.
+        $sql = "delete from alextreg_entrypoints where entrypointname='$sqlentname'";
+        if (do_dbdelete($sql) == 1)
+        {
+            echo "<font color='#00FF00'>ENTRY POINT DELETED!</font><br>\n";
+            $sql = "update alextreg_extensions set lastedit=NOW(), lasteditauthor='$sqlauthor' where id=$extid";
+            do_dbupdate($sql);
+            do_showext($extname);
+        } // if
+    } // if
+    else   // put out a confirmation...
+    {
+        $htmlextname = htmlentities($extname, ENT_QUOTES);
+        $htmlentname = htmlentities($entname, ENT_QUOTES);
+        echo "About to delete an entry point named '$htmlentname'<br>\n";
+        echo "<b><font size='+1'>\n";
+        echo "THERE IS NO UNDELETE. MAKE SURE YOU <u>REALLY</u> WANT TO DO THIS.<br>\n";
+        echo "</font></b>\n";
+        echo "...if you're sure, click 'Confirm'...<br>\n";
+        echo "<form>\n";
+        echo "<input type='hidden' name='extid' value='$extid'>\n";
+        echo "<input type='hidden' name='entname' value='$htmlentname'>\n";
+        echo "<input type='hidden' name='extname' value='$htmlextname'>\n";
+        echo "<input type='hidden' name='operation' value='op_delent'>\n";
+        echo "<input type='hidden' name='iamsure' value='${_SERVER['REMOTE_ADDR']}'>\n";
+        echo "<input type='submit' name='form_submit' value='Confirm'>\n";
+        echo "</form>\n";
+    } // else
+} // op_delent
 
 
 $operations['op_renameext'] = 'op_renameext';
