@@ -41,7 +41,7 @@ CREATE TABLE alextreg_extensions (
     public bool not null,
     author varchar(128) not null,
     entrydate datetime not null,
-    lasteditauthor varchar(128) not null,
+    author varchar(128) not null,
     lastedit datetime not null,
     primary key (id)
 );
@@ -76,7 +76,7 @@ CREATE TABLE alextreg_entrypoints (
 CREATE TABLE alextreg_papertrail (
     id int not null auto_increment,
     action text not null,
-    sql text not null,
+    sql mediumtext not null,
     author varchar(128) not null,
     entrydate datetime not null,
     primary key (id)
