@@ -76,7 +76,7 @@ CREATE TABLE alextreg_entrypoints (
 CREATE TABLE alextreg_papertrail (
     id int not null auto_increment,
     action text not null,
-    sql mediumtext not null,
+    sqltext mediumtext not null,
     author varchar(128) not null,
     entrydate datetime not null,
     primary key (id)
