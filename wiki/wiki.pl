@@ -62,7 +62,7 @@ use vars qw(%Page %Section %Text %InterSite %SaveUrl %SaveNumUrl
   $OpenPageName @KeptList @IndexList $IndexInit $TableMode
   $q $Now $UserID $TimeZoneOffset $ScriptName $BrowseCode $OtherCode
   $AnchoredLinkPattern @HeadingNumbers $TableOfContents $QuotedFullUrl
-  $ConfigError $UploadPattern );
+  $ConfigError $UploadPattern $NoCreateLinks $PrinterMode );
 
 # == Configuration =====================================================
 $DataDir     = "/webspace/projects/alextreg/wiki"; # Main wiki directory
@@ -70,11 +70,11 @@ $UseConfig   = 1;       # 1 = use config file,    0 = do not look for config
 $ConfigFile  = "$DataDir/config";   # Configuration file
 
 # Default configuration (used if UseConfig is 0)
-$CookieName  = "Wiki";          # Name for this wiki (for multi-wiki sites)
-$SiteName    = "Wiki";          # Name of site (used for titles)
+$CookieName  = "AlutWiki";          # Name for this wiki (for multi-wiki sites)
+$SiteName    = "AlutWiki";          # Name of site (used for titles)
 $HomePage    = "HomePage";      # Home page (change space to _)
 $RCName      = "RecentChanges"; # Name of changes page (change space to _)
-$LogoUrl     = "/wiki.gif";     # URL for site logo ("" for no logo)
+$LogoUrl     = "";     # URL for site logo ("" for no logo)
 $ENV{PATH}   = "/usr/bin/";     # Path used to find "diff"
 $ScriptTZ    = "";              # Local time zone ("" means do not print)
 $RcDefault   = 30;              # Default number of RecentChanges days
@@ -149,14 +149,14 @@ $UseAmPm      = 1;      # 1 = use am/pm in times, 0 = use 24-hour times
 $UseIndex     = 0;      # 1 = use index file,     0 = slow/reliable method
 $UseHeadings  = 1;      # 1 = allow = h1 text =,  0 = no header formatting
 $NetworkFile  = 1;      # 1 = allow remote file:, 0 = no file:// links
-$BracketWiki  = 0;	# 1 = [WikiLnk txt] link, 0 = no local descriptions
+$BracketWiki  = 0;      # 1 = [WikiLnk txt] link, 0 = no local descriptions
 $UseLookup    = 1;      # 1 = lookup host names,  0 = skip lookup (IP only)
 $FreeUpper    = 1;      # 1 = force upper case,   0 = do not force case
 $FastGlob     = 1;      # 1 = new faster code,    0 = old compatible code
 $MetaKeywords = 1;      # 1 = Google-friendly,    0 = search-engine averse
 $NamedAnchors = 1;      # 0 = no anchors, 1 = enable anchors,
                         # 2 = enable but suppress display
-$SlashLinks   = 0;      # 1 = use script/action links, 0 = script?action
+$SlashLinks   = 1;      # 1 = use script/action links, 0 = script?action
 $UpperFirst   = 1;      # 1 = free links start uppercase, 0 = no ucfirst
 $AdminBar     = 1;      # 1 = admins see admin links, 0 = no admin bar
 $RepInterMap  = 0;      # 1 = intermap is replacable, 0 = not replacable
@@ -175,6 +175,8 @@ $SearchButton = 0;      # 1 = search button on page, 0 = old behavior
 $EditNameLink = 0;      # 1 = edit links use name (CSS), 0 = '?' links
 $UseMetaWiki  = 0;      # 1 = add MetaWiki search links, 0 = no MW links
 $BracketImg   = 1;      # 1 = [url url.gif] becomes image link, 0 = no img
+$NoCreateLinks = 0;     # 1 = don't make those '?' links, 0 = make them.
+$PrinterMode = 0;       # 1 = trim out some stuff, 0 = work as usual.
 
 # Names of sites.  (The first entry is used for the number link.)
 @IsbnNames = ('bn.com', 'amazon.com', 'search');
@@ -208,6 +210,8 @@ $RcFile      = "$DataDir/rclog";    # New RecentChanges logfile
 $RcOldFile   = "$DataDir/oldrclog"; # Old RecentChanges logfile
 $IndexFile   = "$DataDir/pageidx";  # List of all pages
 $EmailFile   = "$DataDir/emails";   # Email notification lists
+
+# == End of Configuration =================================================
 
 if ($RepInterMap) {
   push @ReplaceableFiles, $InterFile;
@@ -404,6 +408,11 @@ sub InitRequest {
   } else {
     $CGI::DISABLE_UPLOADS = 1;  # no uploads
   }
+  # Modify query string and script path for slashed links
+  if ($SlashLinks && (length($ENV{'PATH_INFO'}) > 1)) {
+    $ENV{'QUERY_STRING'} .= '&' if ($ENV{'QUERY_STRING'});
+    $ENV{'QUERY_STRING'} .= substr($ENV{'PATH_INFO'}, 1);
+  }
   $q = new CGI;
   # Fix some issues with editing UTF8 pages (if charset specified)
   if ($HttpCharset ne '') {
@@ -411,6 +420,13 @@ sub InitRequest {
   }
   $Now = time;                     # Reset in case script is persistent
   $ScriptName = pop(@ScriptPath);  # Name used in links
+
+  # Fix script name for relative links when slashed page links are used
+  if ($SlashLinks) {
+    my $numberOfSlashes = ($ENV{PATH_INFO} =~ tr[/][/]);
+    $ScriptName = ('../' x $numberOfSlashes) . $ScriptName;
+  }
+
   $IndexInit = 0;                  # Must be reset for each request
   $InterSiteInit = 0;
   %InterSite = ();
@@ -470,7 +486,15 @@ sub DoBrowseRequest {
   }
   $action = lc(&GetParam('action', ''));
   $id = &GetParam('id', '');
+  if ($action eq 'printer') {
+    $action = 'browse';
+    $PrinterMode = 1;
+  }
   if ($action eq 'browse') {
+    if ($PrinterMode) {
+      $EmbedWiki = 1;
+      $NoCreateLinks = 1;
+    }
     if ($FreeLinks && (!-f &GetPageFile($id))) {
       $id = &FreeToNormal($id);
     }
@@ -1189,6 +1213,8 @@ sub GetPageOrEditAnchoredLink {
   }
   if ($EditNameLink) {
     return &GetEditLink($id, $name);
+  } elsif ($NoCreateLinks) {
+    return $name;
   } else {
     return $name . &GetEditLink($id, '?');
   }
@@ -1279,6 +1305,15 @@ sub GetHistoryLink {
   return &ScriptLink("action=history&id=$id", $text);
 }
 
+sub GetPrinterLink {
+  my ($id, $text) = @_;
+
+  if ($FreeLinks) {
+    $id =~ s/ /_/g;
+  }
+  return &ScriptLink("action=printer&id=$id", $text);
+}
+
 sub GetHeader {
   my ($id, $title, $oldId) = @_;
   my $header = "";
@@ -1292,6 +1327,8 @@ sub GetHeader {
     $title =~ s/_/ /g;   # Display as spaces
   }
   $result .= &GetHtmlHeader("$SiteName: $title");
+
+  $result .= $q->h1($header . &GetPageLink($id, $id)) if ($PrinterMode);
   return $result  if ($embed);
 
   $result .= '<div class=wikiheader>';
@@ -1399,6 +1436,8 @@ sub GetFooterText {
   } else {
     $result .= T('This page is read-only');
   }
+  $result .= ' | ';
+  $result .= &GetPrinterLink($id, T('Printer-happy version'));
   $result .= ' | ';
   $result .= &GetHistoryLink($id, T('View other revisions'));
   if ($rev ne '') {
@@ -1603,6 +1642,13 @@ sub CommonMarkup {
   local $_ = $text;
 
   if ($doLines < 2) { # 2 = do line-oriented only
+    # The <nocreatelinks> tag prevents creation of '?' links...useful for
+    #  pages with a lot of source code that make the Wiki think there are
+    #  tons of CamelCaseWords that are potential wiki items.
+    if (s/\&lt;nocreatelinks\&gt;//ige) {
+      $NoCreateLinks = 1;
+    }
+
     # The <nowiki> tag stores text with no markup (except quoting HTML)
     s/\&lt;nowiki\&gt;((.|\n)*?)\&lt;\/nowiki\&gt;/&StoreRaw($1)/ige;
     # The <pre> tag wraps the stored text with the HTML <pre> tag

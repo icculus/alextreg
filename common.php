@@ -52,7 +52,7 @@ function current_sql_datetime()
 function get_alext_wiki_url($extname)
 {
     $htmlextname = htmlentities($extname, ENT_QUOTES);
-    return("wiki/wiki.pl?$htmlextname");
+    return("wiki/$htmlextname");
 } // get_alext_wiki_url
 
 

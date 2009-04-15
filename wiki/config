@@ -91,7 +91,7 @@ $FastGlob     = 1;      # 1 = new faster code,    0 = old compatible code
 $MetaKeywords = 1;      # 1 = Google-friendly,    0 = search-engine averse
 $NamedAnchors = 1;      # 0 = no anchors, 1 = enable anchors,
                         # 2 = enable but suppress display
-$SlashLinks   = 0;      # 1 = use script/action links, 0 = script?action
+$SlashLinks   = 1;      # 1 = use script/action links, 0 = script?action
 $UpperFirst   = 1;      # 1 = free links start uppercase, 0 = no ucfirst
 $AdminBar     = 1;      # 1 = admins see admin links, 0 = no admin bar
 $RepInterMap  = 0;      # 1 = intermap is replacable, 0 = not replacable
@@ -143,5 +143,7 @@ $RcFile      = "$DataDir/rclog";    # New RecentChanges logfile
 $RcOldFile   = "$DataDir/oldrclog"; # Old RecentChanges logfile
 $IndexFile   = "$DataDir/pageidx";  # List of all pages
 $EmailFile   = "$DataDir/emails";   # Email notification lists
+$NoCreateLinks = 1;     # 1 = don't make those '?' links, 0 = make them.
+$PrinterMode = 0;       # 1 = trim out some stuff, 0 = work as usual.
 
 # == End of Configuration =================================================
